@@ -19,6 +19,19 @@ module.exports = {
           req.headers.referer = 'https://c.y.qq.com';
           req.headers.host = 'c.y.qq.com';
         }
+      },
+      '/qqsong': {
+        target: 'https://u.y.qq.com',
+        ws: true,
+        changOrigin: true,
+        pathRewrite: {
+          '^/qqsong': ''
+        },
+        bypass: function(req, res, proxyOptions) {
+          req.headers.referer = 'https://y.qq.com/';
+          req.headers.host = 'https://y.qq.com';
+          req.headers['Content-type'] = 'application/x-www-form-urlencoded';
+        }
       }
     }
   }

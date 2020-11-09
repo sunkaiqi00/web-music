@@ -73,10 +73,24 @@ export default {
 </script>
 <style scoped lang='stylus'>
 .singer {
-  position: fixed;
+  position: absolute;
   top: 88px;
   bottom: 0;
   width: 100%;
   z-index: 400;
+}
+
+.fade-bottom-enter-active, .fade-bottom-leave-active {
+  transition: all 1s;
+}
+
+.fade-enter-to, .fade-leave {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
 }
 </style>

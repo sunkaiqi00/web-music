@@ -65,7 +65,7 @@ export default {
 
   methods: {
     onScroll(location) {
-      this.setScrollOffsetY(location.y)
+      this.SET_SCROLL_OFFSETY(location.y)
     },
     // banner 请求
     async getBanner() {
@@ -171,7 +171,7 @@ export default {
     }
 
     .loading-container {
-      position: absolute;
+      position: fixed;
       width: 100px;
       height: 100px;
       left: 50%;

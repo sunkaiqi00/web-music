@@ -15,21 +15,43 @@ const routes = [
     children: [
       {
         path: 'recommend',
-        component: () => import('@/components/recommend/recommend')
+        component: () => import('@/components/recommend/recommend'),
+        meta: {
+          index: 1
+        }
       },
       {
         path: 'singer',
-        component: () => import('@/components/singer/singer')
+        component: () => import('@/components/singer/singer'),
+        meta: {
+          index: 2
+        }
+        // children: [
+        //   {
+        //     path: 'detail/:singer_id',
+        //     component: () => import('@/components/singer/SingerDetail')
+        //   }
+        // ]
       },
       {
         path: 'rank',
-        component: () => import('@/components/rank/rank')
+        component: () => import('@/components/rank/rank'),
+        meta: {
+          index: 3
+        }
       },
       {
         path: 'search',
-        component: () => import('@/components/search/search')
+        component: () => import('@/components/search/search'),
+        meta: {
+          index: 4
+        }
       }
     ]
+  },
+  {
+    path: '/singer/detail',
+    component: () => import('@/components/singer/SingerDetail')
   }
 ];
 

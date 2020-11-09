@@ -95,3 +95,28 @@ export function singer() {
       });
   });
 }
+// 歌手详情
+export function getSingerDetail(parameter) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get('api/v8/fcg-bin/fcg_v8_singer_track_cp.fcg', {
+        params: {
+          ...commonParams,
+          platform: 'yqq',
+          order: 'listen',
+          begin: 0,
+          num: parameter.num,
+          needNewCode: 0,
+          songstatus: 0,
+          g_tk: 1664029744,
+          singermid: parameter.id
+        }
+      })
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}

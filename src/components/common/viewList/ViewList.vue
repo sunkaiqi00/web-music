@@ -10,7 +10,12 @@
       <li v-for="(group,index) in data" :key="index" class="list-group" ref="listgroup">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
-          <li v-for="item in group.list" :key="item.id" class="list-group-item">
+          <li
+            v-for="item in group.list"
+            :key="item.id"
+            class="list-group-item"
+            @click="showSingerDetail(item)"
+          >
             <img v-lazy="item.avatar" class="avatar" />
             <span class="name">{{item.name}}</span>
             <div class="focus-wrapper">
@@ -37,10 +42,10 @@
         >{{item}}</li>
       </ul>
     </div>
-    <div class="list-fixed" v-show="currentTitle" ref="fixedTitle">
+    <div class="list-fixed" v-if="currentTitle" ref="fixedTitle">
       <div class="fixed-title">{{currentTitle}}</div>
     </div>
-    <div class="loading-container" v-if="!data.length">
+    <div class="loading-container" v-if="!data">
       <loading />
     </div>
   </scroll>
@@ -49,15 +54,15 @@
 import scroll from '@/components/common/scroll/scroll'
 import loading from '@/components/common/loading/loading'
 import { attribute } from '@/utils/dom'
-import { homeMixin } from '@/utils/mixin'
+import { homeMixin, singerMixin } from '@/utils/mixin'
 const ONE_CHURT_CUT_HEIGHT = 18
 const FIXED_TITLE_HEIGHT = 33
 export default {
-  mixins: [homeMixin],
+  mixins: [homeMixin, singerMixin],
   props: {
     data: {
       type: Array,
-      default: [],
+      default: null,
     },
   },
   data() {
@@ -78,7 +83,7 @@ export default {
     currentTitle() {
       if (this.scrollY > 0) {
         return ''
-      } else {
+      } else if (this.data) {
         // debugger
         return this.data[this.currentIndex].title
       }
@@ -91,6 +96,16 @@ export default {
     },
   },
   methods: {
+    showSingerDetail(item) {
+      this.SET_SINGER(item)
+      this.$router.push({
+        path: '/singer/detail',
+        query: {
+          singer_id: item.id,
+        },
+      })
+    },
+    // 歌手列表滚动 y 值
     onScroll(location) {
       this.scrollY = location.y
       this.setScrollOffsetY(location.y)
@@ -115,11 +130,11 @@ export default {
     },
     // 计算歌手页面每个 li(一个list-group) 的高度
     calculateHeight() {
-      let list = this.$refs.listgroup
+      this.list = this.$refs.listgroup
       let height = 0
       this.viewListHeight.push(height)
-      for (let i = 0; i < list.length; i++) {
-        let item = list[i]
+      for (let i = 0; i < this.list.length; i++) {
+        let item = this.list[i]
         height += item.clientHeight
         this.viewListHeight.push(height)
       }
@@ -276,14 +291,14 @@ export default {
   }
 
   .loading-container {
-    position: absolute;
+    position: fixed;
     width: 100px;
     height: 100px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     background: #fff;
-    z-index: 50;
+    z-index: 600;
   }
 }
 </style>
