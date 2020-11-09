@@ -22,14 +22,17 @@ export default {
   name: 'slider',
   props: {
     loop: {
+      // 循环
       type: Boolean,
       default: true,
     },
     autoPlay: {
+      // 自动轮播
       type: Boolean,
       default: true,
     },
     interval: {
+      // 时间
       type: Number,
       default: 4000,
     },

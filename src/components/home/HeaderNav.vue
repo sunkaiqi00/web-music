@@ -18,7 +18,7 @@ export default {}
   center();
 
   .text {
-    font-size: 20px;
+    font-size: $font-size-large-x;
     font-weight: bold;
   }
 }

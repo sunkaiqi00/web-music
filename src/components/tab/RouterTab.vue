@@ -25,7 +25,7 @@ export default {}
 .tab {
   display: flex;
   height: 44px;
-  font-size: 16px;
+  font-size: $font-size-medium-x;
 
   .tab-item {
     flex: 1;
@@ -41,7 +41,7 @@ export default {}
       .tab-link {
         color: $text-dark;
         font-weight: 600;
-        font-size: 18px;
+        font-size: $font-size-large;
       }
     }
   }

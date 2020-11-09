@@ -1,0 +1,41 @@
+<template>
+  <div class="loading">
+    <img class="loading-img" src="@/assets/image/loading.gif" />
+    <p class="desc">{{title}}</p>
+  </div>
+</template>
+<script type="text/ecmascript-6">
+export default {
+  props: {
+    title: {
+      type: String,
+      default: '全力载入中...',
+    },
+  },
+}
+</script>
+<style scoped lang="stylus" rel="stylesheet/stylus">
+@import '~assets/style/css/global';
+
+.loading {
+  width: 100%;
+  height: 100%;
+  center();
+
+  .loading-img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .desc {
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    bottom: 15px;
+    transform: translate(-50%, -50%);
+    font-size: $font-size-small;
+    color: $text-dark;
+  }
+}
+</style>

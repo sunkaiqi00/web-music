@@ -20,6 +20,7 @@ axios.interceptors.response.use(
   }
 );
 
+// 首页banner
 export function banner() {
   return new Promise((resolve, reject) => {
     axios
@@ -43,7 +44,7 @@ export function banner() {
       });
   });
 }
-
+// 首页推荐
 export function discList() {
   return new Promise((resolve, reject) => {
     axios
@@ -59,6 +60,31 @@ export function discList() {
           rnd: Math.random(),
           ...commonParams,
           format: 'json'
+        }
+      })
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+// 歌手
+export function singer() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get('api/v8/fcg-bin/v8.fcg', {
+        params: {
+          ...commonParams,
+          channel: 'singer',
+          page: 'list',
+          key: 'all_all_all',
+          pagesize: 100,
+          pagenum: 1,
+          hostUin: 0,
+          needNewCode: 0,
+          platform: 'yqq'
         }
       })
       .then(res => {
