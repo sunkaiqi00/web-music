@@ -11,10 +11,41 @@ export const homeMixin = {
 
 export const singerMixin = {
   computed: {
-    ...mapGetters(['singer'])
+    ...mapGetters([
+      'singer',
+      'play',
+      'fullScreen',
+      'playList',
+      'sequenceList',
+      'mode',
+      'currentIndex',
+      'currentSong'
+    ])
   },
   methods: {
-    ...mapMutations(['SET_SINGER']),
-    ...mapActions(['setSinger'])
+    ...mapMutations([
+      'SET_SINGER',
+      'SET_PLAY',
+      'SET_FULLSCREEN',
+      'SET_PLAYLIST',
+      'SET_SEQUENCELIST',
+      'SET_MODE',
+      'SET_CURRENTINDEX'
+    ]),
+    ...mapActions([
+      'setSinger',
+      'setPlay',
+      'setFullScreen',
+      'setPlayList',
+      'setSequenceList',
+      'setMode',
+      'setCurrentIndex'
+    ]),
+    initPlaySong(songs, index) {
+      this.SET_PLAYLIST(songs);
+      this.SET_SEQUENCELIST(songs);
+      this.SET_CURRENTINDEX(index);
+      this.SET_PLAY(true);
+    }
   }
 };

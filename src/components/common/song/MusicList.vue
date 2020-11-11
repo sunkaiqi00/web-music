@@ -10,7 +10,7 @@
       :style="{backgroundImage:`url('${bgImage}')`}"
       ref="singerImage"
     >
-      <div class="play-wrapper" v-show="songs && !isChangeHeight">
+      <div class="play-wrapper" v-show="songs&&!isChangeHeight">
         <div class="play">
           <span class="iconfont icon-play"></span>
           <span class="text">随机播放</span>
@@ -27,17 +27,19 @@
       ref="songList"
     >
       <div class="song-list-wrapper">
-        <song-list :songs="songs"></song-list>
+        <song-list :songs="songs" @onPlay="onPlay"></song-list>
       </div>
     </scroll>
-    <loading v-show="!songs" class="loading"></loading>
+    <loading v-if="!songs" class="loading"></loading>
   </div>
 </template>
 <script>
 import scroll from '@/components/common/scroll/scroll'
 import loading from '@/components/common/loading/loading'
 import SongList from './SongList'
+import { singerMixin } from '@/utils/mixin'
 export default {
+  mixins: [singerMixin],
   props: {
     songs: {
       type: Array,
@@ -56,8 +58,9 @@ export default {
     return {
       listenScroll: true, // 监听滚动
       scrollY: 0,
-      isChangeHeight: false, // 图片改为固定高度 提高z-index 盖住上滑的列表
       isOpacity: false, // 模糊
+      // 列表滚动到距离顶部60px 取消图片的padding-top 设置固定高度 提高z-index盖住上滑的列表
+      isChangeHeight: false,
     }
   },
   components: {
@@ -66,11 +69,20 @@ export default {
     loading,
   },
   methods: {
+    onPlay(item, index) {
+      // 向 vuex 初始化 歌曲列表
+      this.initPlaySong(this.songs, index)
+    },
     onScroll(location) {
       this.scrollY = location.y
     },
     back() {
-      this.$router.go(-1)
+      this.isChangeHeight = false
+      this.scrollY = 0
+      this.isOpacity = false
+      if (!this.isChangeHeight) {
+        this.$router.go(-1)
+      }
     },
   },
   watch: {
@@ -88,21 +100,23 @@ export default {
       if (newScrollY <= -maxScrollY) {
         // 不能移动超过最大距离
         this.scrollY = -maxScrollY
-        // 移动超过最大距离 改变图片容器
+        // 向上滑动到了最大位置 修改图片样式
         this.isChangeHeight = true
       } else if (newScrollY >= 0) {
         // 禁止向下移动
         this.$refs.layer.style.top = '0'
+        // t添加透明度
         this.isOpacity = false
         scale += percent
+        // 在原本位置继续下滑 对图片放大处理
         this.$refs.singerImage.style.transform = `scale(${scale})`
         this.$refs.singerImage.style.zIndex = `10`
         return
       } else {
-        // 否则  归为图片容器
+        this.$refs.singerImage.style.zIndex = ''
+        // 下滑到原本位置过程 修改图片原本样式
         this.isChangeHeight = false
         this.isOpacity = true
-        this.$refs.singerImage.style.zIndex = ``
       }
       this.$refs.layer.style.top = `${newScrollY}px`
     },
@@ -160,7 +174,7 @@ export default {
     &.changeHeight {
       padding-top: 0;
       height: 60px;
-      z-index: 30;
+      z-index: 10;
     }
 
     .play-wrapper {
@@ -205,7 +219,7 @@ export default {
 
     .opacity {
       background: #000;
-      opacity: 0.4;
+      opacity: 0.3;
     }
   }
 
@@ -238,9 +252,9 @@ export default {
 .loading {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 55%;
   width: 100px;
   height: 100px;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
 }
 </style>

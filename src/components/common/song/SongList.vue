@@ -1,9 +1,12 @@
 <template>
   <div class="song-list">
     <ul>
-      <li v-for="item in songs" :key="item.id" class="item">
+      <li v-for="(item,index) in songs" :key="item.id" class="item" @click="onPlay(item,index)">
         <div class="content">
-          <h2 class="name">{{item.name}}</h2>
+          <h2 class="name">
+            <div>{{index+1}}.</div>
+            <div class="singer-name">{{item.name}}</div>
+          </h2>
           <p class="desc">{{item.singer + ' - ' + item.album}}</p>
         </div>
       </li>
@@ -16,6 +19,11 @@ export default {
     songs: {
       type: Array,
       default: null,
+    },
+  },
+  methods: {
+    onPlay(item, index) {
+      this.$emit('onPlay', item, index)
     },
   },
 }
@@ -57,13 +65,18 @@ export default {
 
       .name {
         no-wrap();
+        display: flex;
         color: $text-dark;
+
+        .singer-name {
+          margin-left: 2px;
+        }
       }
 
       .desc {
         no-wrap();
-        margin-top: 4px;
-        color: $text-dark;
+        margin: 4px 0 0 12px;
+        // margin-top: 4px;
         font-size: 12px;
         color: $text-gray;
       }

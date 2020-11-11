@@ -1,9 +1,9 @@
 <template>
-  <!-- <transition name="slide-right"> -->
-  <div class="singer-detail">
-    <music-list :title="title" :bgImage="bgImage" :songs="songs"></music-list>
-  </div>
-  <!-- </transition> -->
+  <transition name="fade">
+    <div class="singer-detail">
+      <music-list :title="title" :bgImage="bgImage" :songs="songs"></music-list>
+    </div>
+  </transition>
 </template>
 <script>
 import { getSingerDetail } from '@/api/request'
@@ -82,17 +82,17 @@ export default {
 <style scoped lang='stylus'>
 @import '~assets/style/css/global';
 
-.slide-right-enter, .slide-right-leave-to {
+.fade-enter, .fade-leave-to {
   opacity: 0;
-  transform: translate3d(0, 30px, 0);
+  transform: translate3d(100%, 0, 0);
 }
 
-.slide-right-enter-to, .slide-right-leave {
+.fade-enter-to, .fade-leave {
   opacity: 1;
-  transform: translate3d(0, 0px, 0);
+  transform: translate3d(0, 0, 0);
 }
 
-.slide-right-enter-active, .slide-right-leave-active {
+.fade-enter-active, .fade-leave-active {
   transition: all 0.3s;
 }
 
@@ -102,6 +102,6 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  background: gold;
+  z-index: 700;
 }
 </style>

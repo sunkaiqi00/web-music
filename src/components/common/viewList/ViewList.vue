@@ -58,7 +58,7 @@ import { homeMixin, singerMixin } from '@/utils/mixin'
 const ONE_CHURT_CUT_HEIGHT = 18
 const FIXED_TITLE_HEIGHT = 33
 export default {
-  mixins: [homeMixin, singerMixin],
+  mixins: [singerMixin],
   props: {
     data: {
       type: Array,
@@ -82,7 +82,7 @@ export default {
     // 顶部固定 title
     currentTitle() {
       if (this.scrollY > 0) {
-        return ''
+        return
       } else if (this.data) {
         // debugger
         return this.data[this.currentIndex].title
@@ -101,6 +101,7 @@ export default {
       this.$router.push({
         path: '/singer/detail',
         query: {
+          singer_name: item.name,
           singer_id: item.id,
         },
       })
@@ -108,7 +109,7 @@ export default {
     // 歌手列表滚动 y 值
     onScroll(location) {
       this.scrollY = location.y
-      this.setScrollOffsetY(location.y)
+      // this.setScrollOffsetY(location.y)
     },
     // 点击字母 获取索引 歌手页滚动到对应位置
     onShortCutStart(e) {
@@ -172,7 +173,9 @@ export default {
           : 0
       if (this.fixedTop === fixedTop) return
       this.fixedTop = fixedTop
-      this.$refs.fixedTitle.style.transform = `translate3d(0,${this.fixedTop}px,0)`
+      if (this.$refs.fixedTitle) {
+        this.$refs.fixedTitle.style.transform = `translate3d(0,${this.fixedTop}px,0)`
+      }
     },
   },
 }
@@ -248,7 +251,7 @@ export default {
     right: 0;
     top: 50%;
     transform: translateY(-50%) scale(0.9);
-    width: 15px;
+    width: 20px;
     padding: 20px 0;
     border-radius: 10px;
     text-align: center;

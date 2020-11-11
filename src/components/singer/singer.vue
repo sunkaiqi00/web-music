@@ -78,6 +78,11 @@ export default {
   bottom: 0;
   width: 100%;
   z-index: 400;
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
+    width: 0;
+  }
 }
 
 .fade-bottom-enter-active, .fade-bottom-leave-active {

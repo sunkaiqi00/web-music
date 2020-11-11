@@ -26,12 +26,6 @@ const routes = [
         meta: {
           index: 2
         }
-        // children: [
-        //   {
-        //     path: 'detail/:singer_id',
-        //     component: () => import('@/components/singer/SingerDetail')
-        //   }
-        // ]
       },
       {
         path: 'rank',
