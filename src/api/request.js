@@ -120,3 +120,28 @@ export function getSingerDetail(parameter) {
       });
   });
 }
+
+// 歌词
+export function getLyric(mid) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get('api/lyric/fcgi-bin/fcg_query_lyric_new.fcg', {
+        params: {
+          ...commonParams,
+          platform: 'yqq',
+          g_tk: 67232076,
+          songmid: mid,
+          pcachetime: +new Date(),
+          hostUin: 0,
+          needNewCode: 0,
+          format: 'json'
+        }
+      })
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}

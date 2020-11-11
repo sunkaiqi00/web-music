@@ -1,4 +1,5 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
+import { copy, shuffle, find_index } from '@/utils/utils';
 export const homeMixin = {
   computed: {
     ...mapGetters(['scrollOffsetY'])
@@ -41,11 +42,30 @@ export const singerMixin = {
       'setMode',
       'setCurrentIndex'
     ]),
+    // 歌手详情页 点击歌曲初始化
     initPlaySong(songs, index) {
-      this.SET_PLAYLIST(songs);
-      this.SET_SEQUENCELIST(songs);
-      this.SET_CURRENTINDEX(index);
-      this.SET_PLAY(true);
+      let list = copy(songs);
+      this.setSequenceList(list);
+      if (this.mode === 2) {
+        let randomList = copy(songs);
+        this.setPlayList(shuffle(randomList));
+        index = find_index(randomList, list[index]);
+      } else {
+        this.setPlayList(songs);
+      }
+      this.setCurrentIndex(index);
+      this.setPlay(true);
+    },
+    // 歌手详情页 点击随机播放初始化
+    RandomPlat(songs) {
+      this.setMode(2);
+      let sequenceList = copy(songs);
+      this.setSequenceList(sequenceList);
+      let playList = copy(songs);
+      this.setPlayList(shuffle(playList));
+      let index = Math.floor(Math.random() * songs.length);
+      this.setCurrentIndex(index);
+      this.setPlay(true);
     }
   }
 };

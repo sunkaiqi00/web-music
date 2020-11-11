@@ -12,7 +12,12 @@
           <h1 class="title">{{currentSong.name}}</h1>
           <h2 class="subtitle">{{currentSong.singer}}</h2>
         </div>
-        <div class="middle">
+        <div
+          class="middle"
+          @touchstart.prevent="middleTouchStart"
+          @touchmove.prevent="middleTouchMove"
+          @touchend="middleTouchEnd"
+        >
           <div class="middle-l">
             <div class="cd-wrapper">
               <div class="cd" :class="rotate">
@@ -20,7 +25,21 @@
               </div>
             </div>
           </div>
+          <scroll class="middle-r" :data="currentLyric&&currentLyric.lines" ref="lyricList">
+            <div class="lyric-wrapper">
+              <div v-if="currentLyric">
+                <p
+                  ref="lyricLine"
+                  class="text"
+                  :class="{'current':currentLineNum===index}"
+                  v-for="(line,index) in currentLyric.lines"
+                  :key="line.index"
+                >{{line.txt}}</p>
+              </div>
+            </div>
+          </scroll>
         </div>
+
         <div class="bottom">
           <div class="progress-wrapper">
             <div class="current-time">{{format(currentTime)}}</div>
@@ -33,7 +52,7 @@
                 max="100"
                 step="1"
                 :style="{'background-size':`${percent}% 100% !important`}"
-                @change="onProgressChange($event.target.value)"
+                @input="onProgressInput($event.target.value)"
                 ref="progress"
               />
             </div>
@@ -70,7 +89,7 @@
     </transition>
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen&&playList.length">
-        <div class="mini-player-wrapper" @click="setFullScreen(true)">
+        <div class="mini-player-wrapper" @click="set_FullScreen(true)">
           <div class="mini-singer-img">
             <img :src="currentSong.image" alt width="100%" height="100%" :class="rotate" />
           </div>
@@ -97,38 +116,69 @@
       @timeupdate="updataTime"
       @canplay="ready"
       @error="error"
+      @ended="end"
     ></audio>
   </div>
 </template>
 <script>
 import { singerMixin } from '@/utils/mixin'
+import { shuffle } from '@/utils/utils'
+import Lyric from 'lyric-parser'
 import ProgressCircle from '@/components/common/progressCircle/ProgressCircle'
+import scroll from '@/components/common/scroll/scroll'
 export default {
   mixins: [singerMixin],
   components: {
     ProgressCircle,
+    scroll,
   },
   data() {
     return {
       musicReady: false, // 阻止快速切歌 需要歌加载完毕
       currentTime: 0, // 播放时长
+      currentLyric: null, // 歌词
+      currentLineNum: 0, // 歌词 第几行
     }
   },
   methods: {
     // 修改播放模式
     changeMode() {
+      console.log(1)
       let mode = (this.mode + 1) % 3
-      this.SET_MODE(mode)
+      this.setMode(mode)
+      let list = []
+      if (this.mode === 2) {
+        // 随机播放 对歌曲列表重新排序
+        list = shuffle(this.playList)
+      } else {
+        list = this.playList
+      }
+      this.setPlayList(list)
+      // 模式来回切换的同时 currentIndex重新获取
+      this.setCurrentIndex(this.resetCurrentIndex(list))
+    },
+    resetCurrentIndex(list) {
+      return list.findIndex((item) => item.id === this.currentSong.id)
     },
     // 动态修改播放时间
-    onProgressChange(percent) {
-      // console.log(percent)
+    onProgressInput(percent) {
+      let progress =
+        (this.currentTime / this.currentSong.duration).toFixed(6) * 100
+      this.$refs.progress.style.backgroundSize = `${progress}% 100% !important`
       this.currentTime = (Number(percent) / 100) * this.currentSong.duration
-      // console.log(this.currentTime)
       this.$refs.audio.currentTime = this.currentTime
+
       if (!this.play) {
-        this.SET_PLAY(true)
+        this.setPlay(true)
       }
+    },
+    // 全屏显示  或 底部显示
+    set_FullScreen(bol) {
+      this.setFullScreen(bol)
+    },
+    // 播放 暂停
+    switchMusic() {
+      this.setPlay(!this.play)
     },
     error() {
       // 加载失败 仍需设置为true 否则一直为false 功能无法使用
@@ -137,13 +187,18 @@ export default {
     ready() {
       this.musicReady = true
     },
-    // 全屏显示  或 底部显示
-    setFullScreen(bol) {
-      this.SET_FULLSCREEN(bol)
+    // 播放结束
+    end() {
+      if (this.mode === 1) {
+        this.loop()
+      } else {
+        this.next()
+      }
     },
-    // 播放 暂停
-    switchMusic() {
-      this.SET_PLAY(!this.play)
+    // 循环播放
+    loop() {
+      this.$refs.audio.currentTime = 0
+      this.$refs.audio.play()
     },
     // 上
     prev() {
@@ -153,7 +208,7 @@ export default {
       if (index === -1) {
         index = this.playList.length - 1
       }
-      this.SET_CURRENTINDEX(index)
+      this.setCurrentIndex(index)
       if (!this.play) {
         this.switchMusic()
       }
@@ -163,11 +218,14 @@ export default {
     // 下
     next() {
       if (!this.musicReady) return
+      if (this.playList.length === 1) {
+        this.loop()
+      }
       let index = this.currentIndex + 1
-      if (index === this.currentIndex - 1) {
+      if (index === this.playList.length) {
         index = 0
       }
-      this.SET_CURRENTINDEX(index)
+      this.setCurrentIndex(index)
       if (!this.play) {
         this.switchMusic()
       }
@@ -185,6 +243,57 @@ export default {
       let second = Math.floor(time % 60)
       second = second >= 10 ? second : `0${second}`
       return `${minute}:${second}`
+    },
+    middleTouchStart(e) {
+      this.initTouch = true
+      let touch = e.changedTouches[0]
+      this.startX = touch.pageX
+      this.startY = touch.pageY
+    },
+    middleTouchMove(e) {
+      if (!this.initTouch) return
+      let touch = e.changedTouches[0]
+      this.moveX = touch.pageX - this.startX
+      this.moveY = touch.pageY - this.startY
+      if (Math.abs(this.moveY) > Math.abs(this.moveX)) return
+      this.lyric_percent = this.moveX / window.innerWidth
+      console.log(this.lyric_percent)
+      // if (this.moveX <= -window.innerWidth) {
+      //   this.moveX = -window.innerWidth
+      // }
+      // if (this.moveX >= window.innerWidth) {
+      //   this.moveX = window.innerWidth
+      // }
+      // this.$refs.lyricList.$el.style.transform = `translate3d(${this.moveX}px,0,0)`
+    },
+    middleTouchEnd(e) {
+      if (this.moveX <= -200) {
+        this.moveX = -window.innerWidth
+      }
+      if (this.moveX >= 200) {
+        this.moveX = window.innerWidth
+      }
+      this.$refs.lyricList.$el.style.transform = `translate3d(${this.moveX}px,0,0)`
+    },
+    getLyric() {
+      this.currentSong.getSongLyric().then((lyric) => {
+        this.currentLyric = new Lyric(lyric, this.hanldleLyric)
+        if (this.play) {
+          this.currentLyric.play()
+        }
+      })
+    },
+    // 歌词行数发生改变回调
+    hanldleLyric({ lineNum, txt }) {
+      this.currentLineNum = lineNum
+      if (lineNum > 5) {
+        let lineEl = this.$refs.lyricLine[lineNum - 5]
+
+        this.$refs.lyricList &&
+          this.$refs.lyricList.scrollToElement(lineEl, 1000)
+      } else {
+        this.$refs.lyricList && this.$refs.lyricList.scrollTo(0, 0, 1000)
+      }
     },
   },
   computed: {
@@ -213,10 +322,14 @@ export default {
     },
   },
   watch: {
-    currentTime(time) {},
-    currentSong() {
+    // 切换模式时 currentSong会发生变化 判断是否为一首歌
+    currentSong(newSong, oldSong) {
+      if (newSong.id === oldSong.id) return
       this.$nextTick(() => {
         this.audio.play()
+        if (this.getLyric) {
+          this.getLyric()
+        }
       })
     },
     play(play) {
@@ -243,6 +356,7 @@ export default {
     background: rgba(0, 0, 0, 0.3);
     z-index: 1600;
     background: #000;
+    overflow: hidden;
 
     .background {
       position: absolute;
@@ -359,6 +473,7 @@ export default {
         width: 100%;
         height: 100%;
         overflow: hidden;
+        transition: all 0.5s;
 
         .lyric-wrapper {
           width: 80%;
@@ -390,27 +505,6 @@ export default {
       position: absolute;
       bottom: 50px;
       width: 100%;
-
-      .dot-wrapper {
-        text-align: center;
-        font-size: 0;
-
-        .dot {
-          display: inline-block;
-          vertical-align: middle;
-          margin: 0 4px;
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: $color-text-l;
-
-          &.active {
-            width: 20px;
-            border-radius: 5px;
-            background: $color-text-ll;
-          }
-        }
-      }
 
       .progress-wrapper {
         display: flex;

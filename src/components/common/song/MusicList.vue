@@ -10,13 +10,13 @@
       :style="{backgroundImage:`url('${bgImage}')`}"
       ref="singerImage"
     >
+      <div class="filter" :class="{'opacity':isOpacity}"></div>
       <div class="play-wrapper" v-show="songs&&!isChangeHeight">
-        <div class="play">
-          <span class="iconfont icon-play"></span>
+        <div class="play" @click="randomPlay">
+          <span class="iconfont icon-pause"></span>
           <span class="text">随机播放</span>
         </div>
       </div>
-      <div class="filter" :class="{'opacity':isOpacity}"></div>
     </div>
     <div class="bg-layer" ref="layer"></div>
     <scroll
@@ -69,6 +69,9 @@ export default {
     loading,
   },
   methods: {
+    randomPlay() {
+      this.RandomPlat(this.songs)
+    },
     onPlay(item, index) {
       // 向 vuex 初始化 歌曲列表
       this.initPlaySong(this.songs, index)
@@ -193,7 +196,7 @@ export default {
         border-radius: 100px;
         font-size: 0;
 
-        .icon-play {
+        .icon-pause {
           display: inline-block;
           vertical-align: middle;
           margin-right: 6px;

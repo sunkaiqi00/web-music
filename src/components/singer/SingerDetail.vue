@@ -9,7 +9,7 @@
 import { getSingerDetail } from '@/api/request'
 import { ERR_OK } from '@/api/config'
 import { singerMixin } from '@/utils/mixin'
-import { createSong, isValidMusic, processSongsUrl } from '@/utils/songs'
+import { createSong, isValidMusic, processSongsUrl } from '@/api/songs'
 import MusicList from '@/components/common/song/MusicList'
 export default {
   mixins: [singerMixin],

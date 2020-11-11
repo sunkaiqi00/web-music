@@ -57,6 +57,7 @@ import { attribute } from '@/utils/dom'
 import { homeMixin, singerMixin } from '@/utils/mixin'
 const ONE_CHURT_CUT_HEIGHT = 18
 const FIXED_TITLE_HEIGHT = 33
+
 export default {
   mixins: [singerMixin],
   props: {
@@ -78,6 +79,7 @@ export default {
     scroll,
     loading,
   },
+
   computed: {
     // 顶部固定 title
     currentTitle() {
@@ -279,7 +281,7 @@ export default {
 
   .list-fixed {
     position: absolute;
-    top: 0;
+    top: -1px;
     left: 0;
     width: 100%;
 

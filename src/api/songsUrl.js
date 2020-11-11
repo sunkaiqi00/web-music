@@ -1,4 +1,4 @@
-import { commonParams, ERR_OK } from '@/api/config';
+import { commonParams, ERR_OK } from './config';
 import { getUid } from './songs';
 import axios from 'axios';
 
