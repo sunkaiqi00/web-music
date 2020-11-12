@@ -38,7 +38,7 @@
           :key="index"
           class="item"
           :data-index="index"
-          :class="{'active':currentIndex===index}"
+          :class="{'active':current_Index===index}"
         >{{item}}</li>
       </ul>
     </div>
@@ -70,7 +70,7 @@ export default {
     return {
       listenScroll: true,
       viewListHeight: [],
-      currentIndex: 0,
+      current_Index: 0,
       scrollY: null,
       diff: 0, // 滚动差
     }
@@ -86,8 +86,7 @@ export default {
       if (this.scrollY > 0) {
         return
       } else if (this.data) {
-        // debugger
-        return this.data[this.currentIndex].title
+        return this.data[this.current_Index].title
       }
     },
     // 右侧 字母导航
@@ -98,8 +97,13 @@ export default {
     },
   },
   methods: {
+    refresh() {
+      if (this.$refs.listview) {
+        this.$refs.listview.refresh()
+      }
+    },
     showSingerDetail(item) {
-      this.SET_SINGER(item)
+      this.setSinger(item)
       this.$router.push({
         path: '/singer/detail',
         query: {
@@ -152,7 +156,7 @@ export default {
     scrollY(newY) {
       // 1. 滚动到顶部 newY > 0
       if (newY > 0) {
-        this.currentIndex = 0
+        this.current_Index = 0
         return
       }
       // 2. 中间部分滚动
@@ -160,13 +164,13 @@ export default {
         let h1 = this.viewListHeight[i]
         let h2 = this.viewListHeight[i + 1]
         if (-newY >= h1 && -newY < h2) {
-          this.currentIndex = i
+          this.current_Index = i
           this.diff = h2 + newY
           return
         }
       }
       // 3. 滚动到底部 且 -newY大于最后一个元素的上限
-      this.currentIndex = this.viewListHeight.length - 1
+      this.current_Index = this.viewListHeight.length - 1
     },
     diff(newDiff) {
       let fixedTop =
@@ -253,7 +257,7 @@ export default {
     right: 0;
     top: 50%;
     transform: translateY(-50%) scale(0.9);
-    width: 20px;
+    width: 15px;
     padding: 20px 0;
     border-radius: 10px;
     text-align: center;

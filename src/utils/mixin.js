@@ -1,14 +1,5 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { copy, shuffle, find_index } from '@/utils/utils';
-export const homeMixin = {
-  computed: {
-    ...mapGetters(['scrollOffsetY'])
-  },
-  methods: {
-    ...mapMutations(['SET_SCROLL_OFFSETY']),
-    ...mapActions(['setScrollOffsetY'])
-  }
-};
 
 export const singerMixin = {
   computed: {
@@ -20,7 +11,9 @@ export const singerMixin = {
       'sequenceList',
       'mode',
       'currentIndex',
-      'currentSong'
+      'currentSong',
+      'popularSongs',
+      'topList'
     ])
   },
   methods: {
@@ -31,7 +24,9 @@ export const singerMixin = {
       'SET_PLAYLIST',
       'SET_SEQUENCELIST',
       'SET_MODE',
-      'SET_CURRENTINDEX'
+      'SET_CURRENTINDEX',
+      'SET_POPULARSONGS',
+      'SET_TOPLIST'
     ]),
     ...mapActions([
       'setSinger',
@@ -40,12 +35,15 @@ export const singerMixin = {
       'setPlayList',
       'setSequenceList',
       'setMode',
-      'setCurrentIndex'
+      'setCurrentIndex',
+      'setPopularSongs',
+      'setTopList'
     ]),
     // 歌手详情页 点击歌曲初始化
     initPlaySong(songs, index) {
       let list = copy(songs);
       this.setSequenceList(list);
+      // 考虑当前是否随机播放
       if (this.mode === 2) {
         let randomList = copy(songs);
         this.setPlayList(shuffle(randomList));
@@ -66,6 +64,18 @@ export const singerMixin = {
       let index = Math.floor(Math.random() * songs.length);
       this.setCurrentIndex(index);
       this.setPlay(true);
+    },
+    handlePlayList(list) {}
+  },
+  mounted() {
+    this.handlePlayList(this.playList);
+  },
+  activated() {
+    this.handlePlayList(this.playList);
+  },
+  watch: {
+    playList(list) {
+      this.handlePlayList(list);
     }
   }
 };

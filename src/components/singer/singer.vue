@@ -1,6 +1,6 @@
 <template>
-  <div class="singer">
-    <view-list :data="singerList"></view-list>
+  <div class="singer" ref="singer">
+    <view-list :data="singerList" ref="singerList"></view-list>
   </div>
 </template>
 <script>
@@ -9,8 +9,10 @@ const HOT_TITLE = '热门'
 import { singer } from '@/api/request'
 import { ERR_OK } from '@/api/config'
 import { toObj } from '@/utils/utils'
+import { singerMixin } from '@/utils/mixin'
 import ViewList from '@/components/common/viewList/ViewList'
 export default {
+  mixins: [singerMixin],
   data() {
     return {
       singerList: null,
@@ -64,6 +66,11 @@ export default {
       if (code === ERR_OK) {
         this.singerList = this.processing(data.list)
       }
+    },
+    handlePlayList(playList) {
+      let bottom = playList.length > 0 ? '16vw' : ''
+      this.$refs.singer.style.bottom = bottom
+      this.$refs.singerList.refresh()
     },
   },
   created() {

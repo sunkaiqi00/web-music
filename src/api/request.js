@@ -145,3 +145,77 @@ export function getLyric(mid) {
       });
   });
 }
+
+// 热门歌单
+export function getPopularSong(id) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get('api/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg', {
+        params: {
+          ...commonParams,
+          type: 1,
+          json: 1,
+          utf8: 1,
+          onlysong: 0,
+          platform: 'yqq',
+          g_tk: 67232076,
+          disstid: id,
+          hostUin: 0,
+          needNewCode: 0,
+          format: 'json'
+        }
+      })
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+
+// 排行榜单
+export function getTopList() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get('api/v8/fcg-bin/fcg_myqq_toplist.fcg', {
+        params: {
+          ...commonParams,
+          platform: 'h5',
+          needNewCode: 1,
+          format: 'json'
+        }
+      })
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+
+// 排行榜单详细歌单
+export function getTopMusicList(topid) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get('api/v8/fcg-bin/fcg_v8_toplist_cp.fcg', {
+        params: {
+          ...commonParams,
+          topid,
+          platform: 'h5',
+          needNewCode: 1,
+          tpl: 3,
+          type: 'top',
+          page: 'detail',
+          format: 'json'
+        }
+      })
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}

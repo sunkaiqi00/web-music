@@ -1,11 +1,10 @@
 <template>
   <div class="recommend" ref="recommend">
     <scroll
-      ref="scroll"
+      ref="recommendScroll"
       class="recommend-content"
       :data="discList"
       :listenScroll="listenScroll"
-      @onScroll="onScroll"
     >
       <div>
         <div v-if="bannerList.length" class="slider-wrapper">
@@ -22,12 +21,17 @@
         <div class="recommend-list">
           <h1 class="list-title" v-show="discList.length!==0">热门歌单推荐</h1>
           <ul>
-            <li v-for="item in discList" :key="item.dissid" class="item">
+            <li
+              v-for="item in discList"
+              :key="item.dissid"
+              class="item"
+              @click="showPlayList(item)"
+            >
               <div class="icon">
                 <img v-lazy="item.imgurl" alt class="icon-img" />
               </div>
               <div class="text">
-                <h2 class="name">{{item.creator.name||'流行金曲'}}</h2>
+                <h2 class="name">{{item.creator.name}}</h2>
                 <p class="desc">{{item.dissname}}</p>
               </div>
             </li>
@@ -46,9 +50,9 @@ import { ERR_OK } from '@/api/config'
 import slider from '@/components/common/slider/slider'
 import scroll from '@/components/common/scroll/scroll'
 import loading from '@/components/common/loading/loading'
-import { homeMixin } from '@/utils/mixin'
+import { singerMixin } from '@/utils/mixin'
 export default {
-  mixins: [homeMixin],
+  mixins: [singerMixin],
   data() {
     return {
       bannerList: [],
@@ -64,8 +68,15 @@ export default {
   },
 
   methods: {
-    onScroll(location) {
-      this.SET_SCROLL_OFFSETY(location.y)
+    showPlayList(list) {
+      this.setPopularSongs(list)
+      this.$router.push({
+        path: '/recommend/popular',
+        query: {
+          playlist_name: list.dissname,
+          playList_id: list.dissid,
+        },
+      })
     },
     // banner 请求
     async getBanner() {
@@ -83,8 +94,13 @@ export default {
     },
     // 对于轮播和推荐列表的异步请求 可能导致better-scroll计算高度 错误  图片只要加载一个刷新scoll
     bannerLoad() {
-      if (!this.checkLoad) this.$refs.scroll.refresh()
+      if (!this.checkLoad) this.$refs.recommendScroll.refresh()
       this.checkLoad = true
+    },
+    handlePlayList(playList) {
+      let bottom = playList.length > 0 ? '16vw' : ''
+      this.$refs.recommend.style.bottom = bottom
+      this.$refs.recommendScroll.refresh()
     },
   },
 

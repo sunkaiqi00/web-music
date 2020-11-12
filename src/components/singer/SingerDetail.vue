@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade">
+  <transition name="slide-right">
     <div class="singer-detail">
       <music-list :title="title" :bgImage="bgImage" :songs="songs"></music-list>
     </div>
@@ -82,17 +82,17 @@ export default {
 <style scoped lang='stylus'>
 @import '~assets/style/css/global';
 
-.fade-enter, .fade-leave-to {
-  opacity: 0;
+.slide-right-enter, .slide-right-leave-to {
+  // opacity: 0;
   transform: translate3d(100%, 0, 0);
 }
 
-.fade-enter-to, .fade-leave {
-  opacity: 1;
+.slide-right-enter-to, .slide-right-leave {
+  // opacity: 1;
   transform: translate3d(0, 0, 0);
 }
 
-.fade-enter-active, .fade-leave-active {
+.slide-right-enter-active, .slide-right-leave-active {
   transition: all 0.3s;
 }
 

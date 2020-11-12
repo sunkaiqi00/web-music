@@ -46,6 +46,14 @@ const routes = [
   {
     path: '/singer/detail',
     component: () => import('@/components/singer/SingerDetail')
+  },
+  {
+    path: '/recommend/popular',
+    component: () => import('@/components/recommend/PopularSongs')
+  },
+  {
+    path: '/rank/toplist',
+    component: () => import('@/components/rank/TopList')
   }
 ];
 

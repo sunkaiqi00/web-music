@@ -18,11 +18,14 @@
           @touchmove.prevent="middleTouchMove"
           @touchend="middleTouchEnd"
         >
-          <div class="middle-l">
+          <div class="middle-l" ref="middleL">
             <div class="cd-wrapper">
               <div class="cd" :class="rotate">
                 <img class="image" :src="currentSong.image" alt />
               </div>
+            </div>
+            <div class="playing-lyric-wrapper">
+              <div class="playing-lyric">{{playingLyric}}</div>
             </div>
           </div>
           <scroll class="middle-r" :data="currentLyric&&currentLyric.lines" ref="lyricList">
@@ -138,6 +141,7 @@ export default {
       currentTime: 0, // 播放时长
       currentLyric: null, // 歌词
       currentLineNum: 0, // 歌词 第几行
+      playingLyric: '', // 当前播放歌词  cd页面显示
     }
   },
   methods: {
@@ -171,6 +175,9 @@ export default {
       if (!this.play) {
         this.setPlay(true)
       }
+      if (this.currentLyric) {
+        this.currentLyric.seek(this.currentTime * 1000)
+      }
     },
     // 全屏显示  或 底部显示
     set_FullScreen(bol) {
@@ -179,6 +186,10 @@ export default {
     // 播放 暂停
     switchMusic() {
       this.setPlay(!this.play)
+      if (this.currentLyric) {
+        // 播放 暂停 歌词一样
+        this.currentLyric.togglePlay()
+      }
     },
     error() {
       // 加载失败 仍需设置为true 否则一直为false 功能无法使用
@@ -199,11 +210,20 @@ export default {
     loop() {
       this.$refs.audio.currentTime = 0
       this.$refs.audio.play()
+      if (this.currentLyric) {
+        // 歌词 循环
+        this.currentLyric.seek(0)
+      }
     },
     // 上
     prev() {
       // 当前没有加载完毕 阻止切歌
       if (!this.musicReady) return
+      // 播放列表只有一首歌  循环来控制
+      if (this.playList.length === 1) {
+        this.loop()
+        return
+      }
       let index = this.currentIndex - 1
       if (index === -1) {
         index = this.playList.length - 1
@@ -214,12 +234,14 @@ export default {
       }
       // 归为
       this.musicReady = false
+      this.$refs.lyricList && this.$refs.lyricList.scrollTo(0, 0)
     },
     // 下
     next() {
       if (!this.musicReady) return
       if (this.playList.length === 1) {
         this.loop()
+        return
       }
       let index = this.currentIndex + 1
       if (index === this.playList.length) {
@@ -230,6 +252,7 @@ export default {
         this.switchMusic()
       }
       this.musicReady = false
+      this.$refs.lyricList && this.$refs.lyricList.scrollTo(0, 0)
     },
     // 更新播放时间
     updataTime(e) {
@@ -257,35 +280,72 @@ export default {
       this.moveY = touch.pageY - this.startY
       if (Math.abs(this.moveY) > Math.abs(this.moveX)) return
       this.lyric_percent = this.moveX / window.innerWidth
-      console.log(this.lyric_percent)
-      // if (this.moveX <= -window.innerWidth) {
-      //   this.moveX = -window.innerWidth
-      // }
-      // if (this.moveX >= window.innerWidth) {
-      //   this.moveX = window.innerWidth
-      // }
-      // this.$refs.lyricList.$el.style.transform = `translate3d(${this.moveX}px,0,0)`
+      if (this.lyric_percent < 0) {
+        this.offsetX =
+          this.moveX <= -window.innerWidth ? -window.innerWidth : this.moveX
+        this.$refs.lyricList.$el.style.transform = `translate3d(${this.offsetX}px,0,0)`
+        this.$refs.middleL.style.opacity =
+          1 + this.lyric_percent <= 0 ? 0 : 1 + this.lyric_percent
+      } else {
+        this.offset_X =
+          this.moveX >= window.innerWidth
+            ? window.innerWidth
+            : -window.innerWidth + this.moveX
+        this.$refs.lyricList.$el.style.transform = `translate3d(${this.offset_X}px,0,0)`
+        this.$refs.middleL.style.opacity =
+          this.lyric_percent >= 1 ? 1 : this.lyric_percent
+      }
     },
     middleTouchEnd(e) {
-      if (this.moveX <= -200) {
-        this.moveX = -window.innerWidth
+      if (!this.initTouch) return
+      let offsetX, opacity
+      if (this.lyric_percent < 0) {
+        if (this.lyric_percent > -0.2) {
+          offsetX = 0
+          opacity = 1
+          this.$refs.lyricList.$el.style.transform = `translate3d(${offsetX}px,0,0)`
+          this.$refs.middleL.style.opacity = opacity
+        } else {
+          offsetX = -window.innerWidth
+          opacity = 0
+          this.$refs.lyricList.$el.style.transform = `translate3d(${offsetX}px,0,0)`
+          this.$refs.middleL.style.opacity = opacity
+        }
       }
-      if (this.moveX >= 200) {
-        this.moveX = window.innerWidth
+      if (this.lyric_percent > 0) {
+        if (this.lyric_percent < 0.2) {
+          offsetX = -window.innerWidth
+          opacity = 0
+          this.$refs.lyricList.$el.style.transform = `translate3d(${offsetX}px,0,0)`
+          this.$refs.middleL.style.opacity = opacity
+        } else {
+          offsetX = 0
+          opacity = 1
+          this.$refs.lyricList.$el.style.transform = `translate3d(${offsetX}px,0,0)`
+          this.$refs.middleL.style.opacity = opacity
+        }
       }
-      this.$refs.lyricList.$el.style.transform = `translate3d(${this.moveX}px,0,0)`
     },
     getLyric() {
-      this.currentSong.getSongLyric().then((lyric) => {
-        this.currentLyric = new Lyric(lyric, this.hanldleLyric)
-        if (this.play) {
-          this.currentLyric.play()
-        }
-      })
+      this.currentSong
+        .getSongLyric()
+        .then((lyric) => {
+          this.currentLyric = new Lyric(lyric, this.hanldleLyric)
+          if (this.play) {
+            this.currentLyric.play()
+          }
+        })
+        .catch(() => {
+          // 获取歌词错误 清楚遗留
+          this.currentLyric = null
+          this.playingLyric = null
+          this.currentLineNum = 0
+        })
     },
     // 歌词行数发生改变回调
     hanldleLyric({ lineNum, txt }) {
       this.currentLineNum = lineNum
+      this.playingLyric = txt
       if (lineNum > 5) {
         let lineEl = this.$refs.lyricLine[lineNum - 5]
 
@@ -325,6 +385,9 @@ export default {
     // 切换模式时 currentSong会发生变化 判断是否为一首歌
     currentSong(newSong, oldSong) {
       if (newSong.id === oldSong.id) return
+      if (this.currentLyric) {
+        this.currentLyric.stop()
+      }
       this.$nextTick(() => {
         this.audio.play()
         if (this.getLyric) {
@@ -421,6 +484,7 @@ export default {
         width: 100%;
         height: 0;
         padding-top: 80%;
+        transition: all 0.3s;
 
         .cd-wrapper {
           position: absolute;
@@ -461,8 +525,8 @@ export default {
           .playing-lyric {
             height: 20px;
             line-height: 20px;
-            font-size: $font-size-medium;
-            color: $color-text-l;
+            font-size: $font-size-small;
+            color: #bdc3c7;
           }
         }
       }
@@ -473,7 +537,7 @@ export default {
         width: 100%;
         height: 100%;
         overflow: hidden;
-        transition: all 0.5s;
+        transition: all 0.3s;
 
         .lyric-wrapper {
           width: 80%;
@@ -655,6 +719,7 @@ export default {
 
     .mini-player-wrapper {
       flex: 6;
+      width: 200px;
       display: flex;
       align-items: center;
 

@@ -1,7 +1,9 @@
 <template>
   <div class="home">
-    <div class="header-tab-wrapper" :class="{'is-shadow': isShowShadow}">
-      <header-nav></header-nav>
+    <div class="header-tab-wrapper">
+      <div class="m-header">
+        <h1 class="text">Kaihuai Music</h1>
+      </div>
       <router-tab></router-tab>
     </div>
     <transition name="slide-up">
@@ -12,34 +14,16 @@
   </div>
 </template>
 <script>
-import HeaderNav from '@/components/home/HeaderNav'
-import RouterTab from '@/components/tab/RouterTab'
-import { homeMixin } from '@/utils/mixin'
+import RouterTab from '@/components/common/tab/RouterTab'
 export default {
-  mixins: [homeMixin],
   components: {
-    HeaderNav,
     RouterTab,
-  },
-  computed: {
-    isShowShadow() {
-      if (this.scrollOffsetY === 0) {
-        return false
-      } else {
-        return true
-      }
-    },
   },
 }
 </script>
 
 <style lang="stylus" scoped>
-.home {
-  .is-shadow {
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-    z-index: 500;
-  }
-}
+@import '~assets/style/css/global';
 
 .slide-up-enter, .slide-up-leave-to {
   opacity: 0;
@@ -53,5 +37,17 @@ export default {
 
 .slide-up-enter-active, .slide-up-leave-active {
   transition: all 0.3s;
+}
+
+.m-header {
+  width: 100vw;
+  height: 44px;
+  color: $text-dark;
+  center();
+
+  .text {
+    font-size: $font-size-large-x;
+    font-weight: bold;
+  }
 }
 </style>

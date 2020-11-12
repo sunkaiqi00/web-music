@@ -19,5 +19,11 @@ export default {
   },
   setCurrentIndex({ commit }, currentIndex) {
     return commit('SET_CURRENTINDEX', currentIndex);
+  },
+  setPopularSongs({ commit }, popularSongs) {
+    return commit('SET_POPULARSONGS', popularSongs);
+  },
+  setTopList({ commit }, topList) {
+    return commit('SET_TOPLIST', topList);
   }
 };

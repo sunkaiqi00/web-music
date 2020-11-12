@@ -8,5 +8,7 @@ export default {
   currentIndex: state => state.currentIndex,
   currentSong: (state, getters) => {
     return state.playList[state.currentIndex] || {};
-  }
+  },
+  popularSongs: state => state.popularSongs,
+  topList: state => state.topList
 };

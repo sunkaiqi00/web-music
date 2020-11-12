@@ -16,7 +16,7 @@ module.exports = {
           '^/api': ''
         },
         bypass: function(req, res, proxyOptions) {
-          req.headers.referer = 'https://c.y.qq.com';
+          req.headers.referer = 'https://c.y.qq.com/';
           req.headers.host = 'c.y.qq.com';
         }
       },

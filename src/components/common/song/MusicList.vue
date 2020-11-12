@@ -27,7 +27,7 @@
       ref="songList"
     >
       <div class="song-list-wrapper">
-        <song-list :songs="songs" @onPlay="onPlay"></song-list>
+        <song-list :rank="rank" :songs="songs" @onPlay="onPlay"></song-list>
       </div>
     </scroll>
     <loading v-if="!songs" class="loading"></loading>
@@ -52,6 +52,10 @@ export default {
     bgImage: {
       type: String,
       default: null,
+    },
+    rank: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -86,6 +90,11 @@ export default {
       if (!this.isChangeHeight) {
         this.$router.go(-1)
       }
+    },
+    handlePlayList(playList) {
+      let bottom = playList.length > 0 ? '60px' : ''
+      this.$refs.songList.$el.style.bottom = bottom
+      this.$refs.songList.refresh()
     },
   },
   watch: {
@@ -141,27 +150,29 @@ export default {
   .back {
     position: absolute;
     top: 0;
-    left: 6px;
     z-index: 50;
+    width: 60px;
+    height: 60px;
+    center();
 
     .icon-back {
-      display: block;
-      padding: 10px;
-      font-size: $font-size-large-x;
+      font-size: $font-size-large;
       color: $text-light;
+      margin-left: -10px;
     }
   }
 
   .title {
     position: absolute;
     top: 0;
-    left: 10%;
+    left: 50%;
     z-index: 40;
-    width: 80%;
+    width: 60%;
+    height: 60px;
+    transform: translateX(-50%);
     no-wrap();
-    text-align: center;
-    line-height: 40px;
-    font-size: $font-size-large;
+    center();
+    font-size: $font-size-medium;
     color: $text-light;
   }
 

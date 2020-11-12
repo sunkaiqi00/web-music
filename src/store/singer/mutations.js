@@ -19,5 +19,11 @@ export default {
   },
   SET_CURRENTINDEX(state, currentIndex) {
     state.currentIndex = currentIndex;
+  },
+  SET_POPULARSONGS(state, popularSongs) {
+    state.popularSongs = popularSongs;
+  },
+  SET_TOPLIST(state, topList) {
+    state.topList = topList;
   }
 };
