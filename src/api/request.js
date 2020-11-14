@@ -219,3 +219,59 @@ export function getTopMusicList(topid) {
       });
   });
 }
+
+// 热门搜索
+export function getHotKey() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get('api/splcloud/fcgi-bin/gethotkey.fcg', {
+        params: {
+          ...commonParams,
+          platform: 'h5',
+          needNewCode: 1,
+          // g_tk:1928093487,
+          format: 'json'
+        }
+      })
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+
+// 关键词检索   keywords 关键词   page 检索几页  zhida 搜索歌手时为1 列表显示当前歌手  perpage 一次请求多少数据
+export function searchKeywords(keywords, page, zhida, perpage) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get('api/soso/fcgi-bin/search_for_qq_cp', {
+        params: {
+          ...commonParams,
+          w: keywords,
+          p: page,
+          catZhida: zhida ? 1 : 0,
+          zhidaqu: 1,
+          t: 0,
+          flag: 1,
+          ie: 'utf-8',
+          sem: 1,
+          aggr: 0,
+          perpage,
+          n: perpage,
+          remoteplace: 'txt.mqq.all',
+          uid: 0,
+          platform: 'h5',
+          needNewCode: 1,
+          format: 'json'
+        }
+      })
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}

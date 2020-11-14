@@ -45,3 +45,16 @@ export function copy(data) {
 export function find_index(list, item) {
   return list.findIndex(song => song.id === item.id);
 }
+
+// 搜索节流
+export function throttle(fun, delay) {
+  let timer;
+  return function(...args) {
+    if (timer) {
+      clearInterval(timer);
+    }
+    timer = setTimeout(() => {
+      fun.apply(this, args);
+    }, delay);
+  };
+}

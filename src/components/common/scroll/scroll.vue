@@ -24,6 +24,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    pullup: {
+      type: Boolean,
+      default: false,
+    },
+    beforeScroll: {
+      type: Boolean,
+      default: false,
+    },
   },
   watch: {
     data() {
@@ -42,6 +50,20 @@ export default {
       if (this.listenScroll) {
         this.scroll.on('scroll', (location) => {
           this.$emit('onScroll', location)
+        })
+      }
+      // 下拉刷新  监听滚动结束时 判断滚动的距离和最大滚动距离
+      if (this.pullup) {
+        this.scroll.on('scrollEnd', () => {
+          if (this.scroll.y <= this.scroll.maxScrollY + 50) {
+            this.$emit('scrollToEnd')
+          }
+        })
+      }
+      // 滚动前事件
+      if (this.beforeScroll) {
+        this.scroll.on('beforeScrollStart', () => {
+          this.$emit('before_Scroll')
         })
       }
     },

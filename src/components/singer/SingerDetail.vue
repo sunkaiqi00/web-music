@@ -69,7 +69,7 @@ export default {
       this.initRequest()
     },
     $route(to, from) {
-      if (to.path === '/home/singer') {
+      if (to.path) {
         this.songs = null
       }
     },
@@ -83,12 +83,12 @@ export default {
 @import '~assets/style/css/global';
 
 .slide-right-enter, .slide-right-leave-to {
-  // opacity: 0;
+  opacity: 0;
   transform: translate3d(100%, 0, 0);
 }
 
 .slide-right-enter-to, .slide-right-leave {
-  // opacity: 1;
+  opacity: 1;
   transform: translate3d(0, 0, 0);
 }
 
@@ -97,9 +97,7 @@ export default {
 }
 
 .singer-detail {
-  position: relative;
-  left: 0;
-  top: 0;
+  position: absolute;
   width: 100%;
   height: 100%;
   z-index: 700;

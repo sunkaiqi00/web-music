@@ -73,8 +73,8 @@
               ></span>
             </div>
             <div class="icon i-center" @click="switchMusic">
-              <span class="iconfont icon-play" v-show="play"></span>
-              <span class="iconfont icon-pause" v-show="!play"></span>
+              <span class="iconfont icon-pause" v-show="play"></span>
+              <span class="iconfont icon-play" v-show="!play"></span>
             </div>
             <div class="icon i-right">
               <span
@@ -103,8 +103,8 @@
         </div>
         <div class="control-wrapper">
           <div class="control" @click="switchMusic">
-            <span class="iconfont icon-play" v-show="play"></span>
-            <span class="iconfont icon-pause" v-show="!play"></span>
+            <span class="iconfont icon-pause" v-show="play"></span>
+            <span class="iconfont icon-play" v-show="!play"></span>
             <progress-circle :percent="percent"></progress-circle>
           </div>
           <div class="control">
@@ -127,6 +127,9 @@
 import { singerMixin } from '@/utils/mixin'
 import { shuffle } from '@/utils/utils'
 import Lyric from 'lyric-parser'
+import { Base64 } from 'js-base64'
+import { getLyric } from '@/api/request'
+import { ERR_OK } from '@/api/config'
 import ProgressCircle from '@/components/common/progressCircle/ProgressCircle'
 import scroll from '@/components/common/scroll/scroll'
 export default {
@@ -342,6 +345,7 @@ export default {
           this.currentLineNum = 0
         })
     },
+
     // 歌词行数发生改变回调
     hanldleLyric({ lineNum, txt }) {
       this.currentLineNum = lineNum
@@ -388,12 +392,11 @@ export default {
       if (this.currentLyric) {
         this.currentLyric.stop()
       }
-      this.$nextTick(() => {
+      setTimeout(() => {
         this.audio.play()
-        if (this.getLyric) {
-          this.getLyric()
-        }
-      })
+
+        this.getLyric()
+      }, 200)
     },
     play(play) {
       this.$nextTick(() => {

@@ -54,7 +54,7 @@
 import scroll from '@/components/common/scroll/scroll'
 import loading from '@/components/common/loading/loading'
 import { attribute } from '@/utils/dom'
-import { homeMixin, singerMixin } from '@/utils/mixin'
+import { singerMixin } from '@/utils/mixin'
 const ONE_CHURT_CUT_HEIGHT = 18
 const FIXED_TITLE_HEIGHT = 33
 

@@ -1,7 +1,7 @@
 <template>
   <div class="loading">
     <img class="loading-img" src="@/assets/image/loading.gif" />
-    <p class="desc">{{title}}</p>
+    <p class="desc" v-show="titleShow">{{title}}</p>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -10,6 +10,10 @@ export default {
     title: {
       type: String,
       default: '全力载入中...',
+    },
+    titleShow: {
+      type: Boolean,
+      default: true,
     },
   },
 }

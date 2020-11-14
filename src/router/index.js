@@ -16,32 +16,29 @@ const routes = [
       {
         path: 'recommend',
         component: () => import('@/components/recommend/recommend'),
-        meta: {
-          index: 1
-        }
+        meta: {}
       },
       {
         path: 'singer',
         component: () => import('@/components/singer/singer'),
-        meta: {
-          index: 2
-        }
+        meta: {}
       },
       {
         path: 'rank',
         component: () => import('@/components/rank/rank'),
-        meta: {
-          index: 3
-        }
+        meta: {}
       },
       {
-        path: 'search',
-        component: () => import('@/components/search/search'),
-        meta: {
-          index: 4
-        }
+        path: 'profile',
+        component: () => import('@/components/profile/profile'),
+        meta: {}
       }
     ]
+  },
+  {
+    path: '/search',
+    component: () => import('@/components/search/search'),
+    meta: {}
   },
   {
     path: '/singer/detail',
