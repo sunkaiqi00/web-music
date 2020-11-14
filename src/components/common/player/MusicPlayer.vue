@@ -130,7 +130,7 @@ import Lyric from 'lyric-parser'
 import { Base64 } from 'js-base64'
 import { getLyric } from '@/api/request'
 import { ERR_OK } from '@/api/config'
-import ProgressCircle from '@/components/common/progressCircle/ProgressCircle'
+import ProgressCircle from './ProgressCircle'
 import scroll from '@/components/common/scroll/scroll'
 export default {
   mixins: [singerMixin],

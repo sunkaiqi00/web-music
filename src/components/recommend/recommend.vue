@@ -188,7 +188,7 @@ export default {
 
     .loading-container {
       position: fixed;
-      width: 100px;
+      width: 130px;
       height: 100px;
       left: 50%;
       top: 50%;

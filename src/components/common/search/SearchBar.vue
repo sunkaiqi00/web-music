@@ -6,9 +6,9 @@
     <div class="search-input-wrapper">
       <span class="iconfont icon-search"></span>
       <input ref="searchInput" v-model="keywords" class="search-input" :placeholder="placeholder" />
-      <span @click="clearQuery" v-show="keywords" class="iconfont icon-clear"></span>
+      <span @click="clearQuery" v-show="keywords" class="iconfont icon-delete"></span>
     </div>
-    <div v-show="keywords" class="search-button">搜索</div>
+    <div class="search-button">搜索</div>
   </div>
 </template>
 <script>
@@ -26,6 +26,9 @@ export default {
     }
   },
   methods: {
+    search() {
+      console.log(this.keywords)
+    },
     // 输入框失去焦点
     blur() {
       this.$refs.searchInput.blur()
@@ -77,7 +80,7 @@ export default {
     right: 0;
     width: 50px;
     height: 100%;
-    font-size: 10px;
+    font-size: 12px;
     center();
   }
 
@@ -116,7 +119,7 @@ export default {
       }
     }
 
-    .icon-clear {
+    .icon-delete {
       flex: 0 0 35px;
       width: 35px;
       center();

@@ -1,6 +1,6 @@
 <template>
   <div class="loading">
-    <img class="loading-img" src="@/assets/image/loading.gif" />
+    <img class="loading-img" src="@/assets/image/loading-two.gif" />
     <p class="desc" v-show="titleShow">{{title}}</p>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
     text-align: center;
     position: absolute;
     left: 50%;
-    bottom: 15px;
+    bottom: 0;
     transform: translate(-50%, -50%);
     font-size: $font-size-small;
     color: $text-dark;

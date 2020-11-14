@@ -45,14 +45,11 @@
     <div class="list-fixed" v-if="currentTitle" ref="fixedTitle">
       <div class="fixed-title">{{currentTitle}}</div>
     </div>
-    <div class="loading-container" v-if="!data">
-      <loading />
-    </div>
   </scroll>
 </template>
 <script>
 import scroll from '@/components/common/scroll/scroll'
-import loading from '@/components/common/loading/loading'
+
 import { attribute } from '@/utils/dom'
 import { singerMixin } from '@/utils/mixin'
 const ONE_CHURT_CUT_HEIGHT = 18
@@ -77,7 +74,6 @@ export default {
   },
   components: {
     scroll,
-    loading,
   },
 
   computed: {
@@ -297,17 +293,6 @@ export default {
       color: $text-dark;
       background: $color-highlight-background;
     }
-  }
-
-  .loading-container {
-    position: fixed;
-    width: 100px;
-    height: 100px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    z-index: 600;
   }
 }
 </style>

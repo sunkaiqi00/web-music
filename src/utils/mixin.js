@@ -117,7 +117,9 @@ export const singerMixin = {
       this.SET_CURRENTINDEX(now_p_currentIndex);
       this.setPlay(true);
     },
-    handlePlayList(list) {}
+    handlePlayList(list) {
+      console.log(list);
+    }
   },
   mounted() {
     this.handlePlayList(this.playList);
@@ -129,5 +131,15 @@ export const singerMixin = {
     playList(list) {
       this.handlePlayList(list);
     }
+  }
+};
+
+export const userMixin = {
+  computed: {
+    ...mapGetters(['qq_num', 'searchHistory'])
+  },
+  methods: {
+    ...mapMutations(['SET_SEARCH_HISTORY']),
+    ...mapActions(['setSearchHistory'])
   }
 };

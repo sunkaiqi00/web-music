@@ -1,6 +1,9 @@
 <template>
   <div class="singer" ref="singer">
     <view-list :data="singerList" ref="singerList"></view-list>
+    <div class="loading-container" v-if="!singerList">
+      <loading />
+    </div>
   </div>
 </template>
 <script>
@@ -11,6 +14,7 @@ import { ERR_OK } from '@/api/config'
 import { toObj } from '@/utils/utils'
 import { singerMixin } from '@/utils/mixin'
 import ViewList from '@/components/common/viewList/ViewList'
+import loading from '@/components/common/loading/loading'
 export default {
   mixins: [singerMixin],
   data() {
@@ -20,6 +24,7 @@ export default {
   },
   components: {
     ViewList,
+    loading,
   },
   methods: {
     // 分类 排序 降维(1维)
@@ -89,6 +94,17 @@ export default {
   &::-webkit-scrollbar {
     display: none; /* Chrome Safari */
     width: 0;
+  }
+
+  .loading-container {
+    position: fixed;
+    width: 130px;
+    height: 100px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    z-index: 600;
   }
 }
 

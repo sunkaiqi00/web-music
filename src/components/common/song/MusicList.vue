@@ -13,7 +13,7 @@
       <div class="filter" :class="{'opacity':isOpacity}"></div>
       <div class="play-wrapper" v-show="songs&&!isChangeHeight">
         <div class="play" @click="randomPlay">
-          <span class="iconfont icon-pause"></span>
+          <span class="iconfont icon-play"></span>
           <span class="text">随机播放</span>
         </div>
       </div>
@@ -207,7 +207,7 @@ export default {
         border-radius: 100px;
         font-size: 0;
 
-        .icon-pause {
+        .icon-play {
           display: inline-block;
           vertical-align: middle;
           margin-right: 6px;

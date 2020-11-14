@@ -11,7 +11,7 @@ export { toObj };
 function getRandom(max, min) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
+// 随机打乱数组
 export function shuffle(array) {
   for (let i = 0; i < array.length; i++) {
     let j = getRandom(0, i);
@@ -25,7 +25,6 @@ export function shuffle(array) {
 function getType(data) {
   return Object.prototype.toString.call(data).slice(8, -1);
 }
-
 // 深拷贝
 export function copy(data) {
   let res;
@@ -57,4 +56,19 @@ export function throttle(fun, delay) {
       fun.apply(this, args);
     }, delay);
   };
+}
+
+//
+export function insertArr(arr, key) {
+  const MAX_LENGTH = 15;
+  let fdIndex = arr.findIndex(item => item === key);
+  if (fdIndex === 0) return;
+  if (fdIndex > 0) {
+    arr.splice(fdIndex, 1);
+  }
+  arr.unshift(key);
+  if (arr.length > MAX_LENGTH) {
+    arr.pop();
+  }
+  return arr;
 }

@@ -46,7 +46,7 @@ import { ERR_OK } from '@/api/config'
 import { createSong, isValidMusic, processSongsUrl } from '@/api/songs'
 import scroll from '@/components/common/scroll/scroll'
 import loading from '@/components/common/loading/loading'
-import nothing from '@/components/common/nothing/nothing'
+import nothing from '@/components/common/loading/nothing'
 import { singerMixin } from '@/utils/mixin'
 const TYPE_SINGER = 'singer'
 const PERPAGE = 20 //一次请求多少数据
@@ -80,8 +80,10 @@ export default {
     before_Scroll() {
       this.$emit('suggestScroll')
     },
-    // 点击搜索 歌手 调转到详情页
+    // 点击搜索信息
     displaySong(item) {
+      this.$emit('search_History', `${item.name} ${item.singer}`)
+      //  歌手 调转到详情页
       if (item.type === TYPE_SINGER) {
         let singer = {
           avatar: item.singerimg,
@@ -178,6 +180,7 @@ export default {
     },
   },
   watch: {
+    // 搜索关键词 变化发送请求
     keywords(k) {
       this.list = null
       this.hasMore = true
@@ -278,7 +281,7 @@ export default {
     position: relative;
     margin: 0 auto;
     width: 80px;
-    height: 50px;
+    height: 60px;
     background: #fff;
   }
 }

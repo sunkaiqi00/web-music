@@ -126,7 +126,7 @@ export default {
 
   .loading-container {
     position: absolute;
-    width: 100px;
+    width: 130px;
     height: 100px;
     top: 30%;
     left: 50%;
