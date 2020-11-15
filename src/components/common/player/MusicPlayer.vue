@@ -102,17 +102,18 @@
           </div>
         </div>
         <div class="control-wrapper">
-          <div class="control" @click="switchMusic">
+          <div class="control control-play-pause" @click="switchMusic">
             <span class="iconfont icon-pause" v-show="play"></span>
             <span class="iconfont icon-play" v-show="!play"></span>
             <progress-circle :percent="percent"></progress-circle>
           </div>
-          <div class="control">
+          <div class="control" @click.stop="showPayList">
             <span class="iconfont icon-playlist"></span>
           </div>
         </div>
       </div>
     </transition>
+    <play-list ref="payList"></play-list>
     <audio
       :src="currentSong.url"
       ref="audio"
@@ -124,19 +125,22 @@
   </div>
 </template>
 <script>
-import { singerMixin } from '@/utils/mixin'
-import { shuffle } from '@/utils/utils'
+import { musicMixin, userMixin } from '@/utils/mixin'
+import { shuffle, insertArr } from '@/utils/utils'
+import { savePlayHistory, getPlayHistory } from '@/utils/localStorage'
 import Lyric from 'lyric-parser'
 import { Base64 } from 'js-base64'
 import { getLyric } from '@/api/request'
 import { ERR_OK } from '@/api/config'
 import ProgressCircle from './ProgressCircle'
 import scroll from '@/components/common/scroll/scroll'
+import PlayList from '../song/PlayList'
 export default {
-  mixins: [singerMixin],
+  mixins: [musicMixin, userMixin],
   components: {
     ProgressCircle,
     scroll,
+    PlayList,
   },
   data() {
     return {
@@ -148,24 +152,9 @@ export default {
     }
   },
   methods: {
-    // 修改播放模式
-    changeMode() {
-      console.log(1)
-      let mode = (this.mode + 1) % 3
-      this.setMode(mode)
-      let list = []
-      if (this.mode === 2) {
-        // 随机播放 对歌曲列表重新排序
-        list = shuffle(this.playList)
-      } else {
-        list = this.playList
-      }
-      this.setPlayList(list)
-      // 模式来回切换的同时 currentIndex重新获取
-      this.setCurrentIndex(this.resetCurrentIndex(list))
-    },
-    resetCurrentIndex(list) {
-      return list.findIndex((item) => item.id === this.currentSong.id)
+    // 显示播放列表
+    showPayList() {
+      this.$refs.payList.show()
     },
     // 动态修改播放时间
     onProgressInput(percent) {
@@ -200,6 +189,14 @@ export default {
     },
     ready() {
       this.musicReady = true
+      // 存储播放的歌曲
+      let play_history = getPlayHistory(this.qq_num)
+      if (!play_history) {
+        play_history = []
+      }
+      let list = insertArr(play_history, this.currentSong)
+      savePlayHistory(this.qq_num, list)
+      this.setPlayHistory(list)
     },
     // 播放结束
     end() {
@@ -329,6 +326,7 @@ export default {
         }
       }
     },
+    // 生成歌词
     getLyric() {
       this.currentSong
         .getSongLyric()
@@ -361,14 +359,6 @@ export default {
     },
   },
   computed: {
-    // 播放模式  0 顺序   1 单曲   2 随机
-    playMode() {
-      return this.mode === 0
-        ? 'icon-sequence'
-        : this.mode === 1
-        ? 'icon-loop'
-        : 'icon-random'
-    },
     // 计算播放 百分比
     percent() {
       return (this.currentTime / this.currentSong.duration).toFixed(6) * 100
@@ -388,7 +378,7 @@ export default {
   watch: {
     // 切换模式时 currentSong会发生变化 判断是否为一首歌
     currentSong(newSong, oldSong) {
-      if (newSong.id === oldSong.id) return
+      if (newSong.id === oldSong.id || !newSong.id) return
       if (this.currentLyric) {
         this.currentLyric.stop()
       }
@@ -455,20 +445,20 @@ export default {
       }
 
       .title {
-        width: 70%;
+        width: 55%;
         margin: 0 auto;
         line-height: 40px;
         text-align: center;
         no-wrap();
-        font-size: $font-size-large;
-        color: $color-text;
+        font-size: $font-size-medium-x;
+        color: $text-light;
       }
 
       .subtitle {
         line-height: 20px;
         text-align: center;
         font-size: $font-size-medium;
-        color: $color-text;
+        color: $text-light;
       }
     }
 
@@ -554,7 +544,7 @@ export default {
             font-size: $font-size-medium;
 
             &.current {
-              color: $color-text;
+              color: $text-light;
             }
           }
 
@@ -576,7 +566,7 @@ export default {
       .progress-wrapper {
         display: flex;
         width: 100%;
-        padding: 15px 0;
+        padding: 15px 0 20px;
 
         .current-time, .toggal-time {
           flex: 2;
@@ -644,7 +634,7 @@ export default {
           }
 
           .icon-play, .icon-pause {
-            font-size: 28px;
+            font-size: 38px;
           }
         }
 
@@ -700,7 +690,7 @@ export default {
     position: fixed;
     left: 0;
     bottom: 0;
-    z-index: 1600;
+    z-index: 1100;
     width: 100%;
     height: 60px;
     background: #fff;
@@ -767,6 +757,15 @@ export default {
       flex: 2;
       display: flex;
 
+      &:first-child {
+        transform: scale(2);
+        background: #000;
+      }
+
+      .control-play-pause {
+        transform: scale(1.3);
+      }
+
       .control {
         position: relative;
         flex: 1;
@@ -774,8 +773,13 @@ export default {
         align-items: center;
         justify-content: center;
 
-        .icon-play, .icon-pause, .icon-playlist {
+        .icon-playlist {
           font-size: 24px;
+          color: rgba(0, 0, 0, 0.7);
+        }
+
+        .icon-play, .icon-pause {
+          font-size: 20px;
           color: rgba(0, 0, 0, 0.7);
         }
       }

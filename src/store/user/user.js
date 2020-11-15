@@ -4,7 +4,8 @@ import actions from './actions';
 const user = {
   state: {
     qq_num: '1138245754',
-    searchHistory: []
+    searchHistory: [],
+    playHistory: [] // 播放历史
   },
   getters,
   mutations,

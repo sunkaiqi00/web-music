@@ -37,9 +37,9 @@
 import scroll from '@/components/common/scroll/scroll'
 import loading from '@/components/common/loading/loading'
 import SongList from './SongList'
-import { singerMixin } from '@/utils/mixin'
+import { musicMixin } from '@/utils/mixin'
 export default {
-  mixins: [singerMixin],
+  mixins: [musicMixin],
   props: {
     songs: {
       type: Array,
@@ -266,8 +266,8 @@ export default {
 .loading {
   position: absolute;
   left: 50%;
-  top: 55%;
-  width: 100px;
+  top: 50%;
+  width: 130px;
   height: 100px;
   transform: translateX(-50%);
 }

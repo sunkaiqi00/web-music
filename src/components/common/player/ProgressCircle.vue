@@ -13,7 +13,7 @@
         cx="50"
         cy="50"
         fill="transparent"
-        stroke="#000"
+        stroke="#EA2027"
         stroke-width="6"
         :stroke-dasharray="dashArray"
         :stroke-dashoffset="dashOffset"
@@ -55,12 +55,12 @@ export default {
   .svg-wrapper {
     .progress-background {
       transform-origin: center;
-      transform: scale(0.9);
+      // transform: scale(0.9);
     }
 
     .progress-bar {
       transform-origin: center;
-      transform: scale(0.9) rotate(-90deg);
+      transform: scale(0.8) rotate(-90deg);
     }
   }
 }

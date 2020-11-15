@@ -25,5 +25,8 @@ export default {
   },
   setTopList({ commit }, topList) {
     return commit('SET_TOPLIST', topList);
+  },
+  setPlayHistory({ commit }, playHistory) {
+    return commit('SET_PLAYHISTORY', playHistory);
   }
 };

@@ -12,11 +12,11 @@ const HOT_TITLE = '热门'
 import { singer } from '@/api/request'
 import { ERR_OK } from '@/api/config'
 import { toObj } from '@/utils/utils'
-import { singerMixin } from '@/utils/mixin'
+import { musicMixin } from '@/utils/mixin'
 import ViewList from '@/components/common/viewList/ViewList'
 import loading from '@/components/common/loading/loading'
 export default {
-  mixins: [singerMixin],
+  mixins: [musicMixin],
   data() {
     return {
       singerList: null,

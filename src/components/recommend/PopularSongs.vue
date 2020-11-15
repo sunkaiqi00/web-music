@@ -5,12 +5,12 @@
 </template>
 <script>
 import MusicList from '@/components/common/song/MusicList'
-import { singerMixin } from '@/utils/mixin'
+import { musicMixin } from '@/utils/mixin'
 import { getPopularSong } from '@/api/request'
 import { ERR_OK } from '@/api/config'
 import { createSong, isValidMusic, processSongsUrl } from '@/api/songs'
 export default {
-  mixins: [singerMixin],
+  mixins: [musicMixin],
   components: {
     MusicList,
   },

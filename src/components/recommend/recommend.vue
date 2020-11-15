@@ -50,9 +50,9 @@ import { ERR_OK } from '@/api/config'
 import slider from '@/components/common/slider/slider'
 import scroll from '@/components/common/scroll/scroll'
 import loading from '@/components/common/loading/loading'
-import { singerMixin } from '@/utils/mixin'
+import { musicMixin } from '@/utils/mixin'
 export default {
-  mixins: [singerMixin],
+  mixins: [musicMixin],
   data() {
     return {
       bannerList: [],

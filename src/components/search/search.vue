@@ -1,20 +1,23 @@
 <template>
-  <transition name="slide-up">
+  <transition name="slide-right">
     <div class="search">
       <search-bar ref="searchBar" @emitkeywords="emitkeywords"></search-bar>
-      <div class="shortcut-wrapper">
+      <div class="shortcut-wrapper" ref="shortcut">
         <div class="shortcut">
           <div class="hot-key">
             <h1 class="title">热门搜索</h1>
             <ul>
-              <li class="item" v-for="item in hotKey" :key="item.n" @click="serachHotKey(item.k)">
-                <span>{{item.k}}</span>
-              </li>
+              <li
+                class="item"
+                v-for="item in hotKey"
+                :key="item.n"
+                @click="serachHotKey(item.k)"
+              >{{item.k}}</li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="search-history" v-show="search_history_list.length">
+      <div class="search-history" v-show="search_history_list.length&&hotKey" :style="{top:top}">
         <search-history
           :searchHistory_List="search_history_list"
           @clearAll="showToast"
@@ -22,8 +25,9 @@
           @serachHotKey="serachHotKey"
         ></search-history>
       </div>
-      <div class="search-result" v-show="keywords">
+      <div class="search-result" v-show="keywords" ref="searchResult">
         <keywords-suggest
+          ref="keywords_Suggest"
           :keywords="keywords"
           @suggestScroll="suggestScroll"
           @search_History="search_History"
@@ -42,19 +46,20 @@ import {
   removeLocalStorage,
 } from '@/utils/localStorage'
 import { SEARCHHISTORY } from '@/utils/const'
-import { userMixin } from '@/utils/mixin'
+import { userMixin, musicMixin } from '@/utils/mixin'
 import { insertArr } from '@/utils/utils'
 import SearchBar from '@/components/common/search/SearchBar'
 import KeywordsSuggest from '@/components/common/search/KeywordsSuggest'
 import SearchHistory from '@/components/common/search/SearchHistory'
 import ConfirmToast from '@/components/common/confirmToast/ConfirmToast'
 export default {
-  mixins: [userMixin],
+  mixins: [userMixin, musicMixin],
   data() {
     return {
       hotKey: null,
       keywords: null,
       title: '是否清空所有搜索记录？',
+      top: 0,
     }
   },
   components: {
@@ -69,13 +74,18 @@ export default {
     },
   },
   methods: {
+    handlePlayList(playList) {
+      let bottom = playList.length > 0 ? '60px' : 0
+      this.$refs.searchResult.style.bottom = bottom
+      this.$refs.keywords_Suggest.refresh()
+    },
     showToast() {
       this.$refs.toast.show()
     },
     // 清楚全部搜索历史
     clearAll() {
       removeLocalStorage(this.qq_num, SEARCHHISTORY).then((res) => {
-        if (res === 0) {
+        if (res) {
           this.setSearchHistory([])
         }
       })
@@ -89,6 +99,7 @@ export default {
       this.setSearchHistory(searchList)
       saveSearchHistory(this.qq_num, searchList)
     },
+    // 搜索列表点击搜索 保存关键词
     search_History(keywords) {
       let search = insertArr(this.searchHistory, keywords)
       this.setSearchHistory(search)
@@ -119,6 +130,16 @@ export default {
         this.keywords = null
       }
     },
+    hotKey() {
+      this.$nextTick(() => {
+        let top =
+          this.$refs.shortcut.offsetHeight +
+          this.$refs.searchBar.$el.offsetHeight +
+          10 +
+          'px'
+        this.top = top
+      })
+    },
   },
   created() {
     this._getHotKey()
@@ -148,7 +169,7 @@ export default {
       overflow: hidden;
 
       .hot-key {
-        margin: 0 20px 20px 20px;
+        margin: 0 20px;
 
         .title {
           margin-bottom: 20px;
@@ -161,8 +182,8 @@ export default {
           padding: 5px 10px;
           margin: 0 20px 10px 0;
           border-radius: 6px;
-          background: $color-highlight-background;
           font-size: $font-size-small-s;
+          background: $color-highlight-background;
           color: $text-dark;
         }
       }
@@ -171,7 +192,7 @@ export default {
 
   .search-history {
     position: absolute;
-    top: 240px;
+    top: 200px;
     bottom: 0;
     width: 100%;
   }
@@ -185,17 +206,17 @@ export default {
   }
 }
 
-.slide-up-enter, .slide-up-leave-to {
+.slide-right-enter, .slide-right-leave-to {
   opacity: 0;
   transform: translate3d(100%, 0, 0);
 }
 
-.slide-up-enter-to, .slide-up-leave {
+.slide-right-enter-to, .slide-right-leave {
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
 
-.slide-up-enter-active, .slide-up-leave-active {
-  transition: all 0.3s;
+.slide-right-enter-active, .slide-right-leave-active {
+  transition: all 0.2s;
 }
 </style>

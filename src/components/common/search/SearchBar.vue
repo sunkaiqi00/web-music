@@ -1,14 +1,18 @@
 <template>
   <div class="search-page-wrapper">
-    <div class="back">
+    <div class="back" v-show="showBackIcon">
       <span class="iconfont icon-back" @click="goback"></span>
     </div>
     <div class="search-input-wrapper">
       <span class="iconfont icon-search"></span>
-      <input ref="searchInput" v-model="keywords" class="search-input" :placeholder="placeholder" />
+      <input
+        ref="searchInput"
+        v-model.trim="keywords"
+        class="search-input"
+        :placeholder="placeholder"
+      />
       <span @click="clearQuery" v-show="keywords" class="iconfont icon-delete"></span>
     </div>
-    <div class="search-button">搜索</div>
   </div>
 </template>
 <script>
@@ -19,6 +23,10 @@ export default {
       type: String,
       default: '搜索歌曲,歌手',
     },
+    showBackIcon: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -26,9 +34,6 @@ export default {
     }
   },
   methods: {
-    search() {
-      console.log(this.keywords)
-    },
     // 输入框失去焦点
     blur() {
       this.$refs.searchInput.blur()
@@ -73,15 +78,6 @@ export default {
     .icon-back {
       margin-left: 5px;
     }
-  }
-
-  .search-button {
-    position: absolute;
-    right: 0;
-    width: 50px;
-    height: 100%;
-    font-size: 12px;
-    center();
   }
 
   .search-input-wrapper {

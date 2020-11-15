@@ -1,2 +1,3 @@
 const SEARCHHISTORY = 'searchHistory';
-export { SEARCHHISTORY };
+const PLAYHISTORY = 'playHistory';
+export { SEARCHHISTORY, PLAYHISTORY };

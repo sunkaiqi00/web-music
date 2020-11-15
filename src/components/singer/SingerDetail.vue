@@ -8,11 +8,11 @@
 <script>
 import { getSingerDetail } from '@/api/request'
 import { ERR_OK } from '@/api/config'
-import { singerMixin } from '@/utils/mixin'
+import { musicMixin } from '@/utils/mixin'
 import { createSong, isValidMusic, processSongsUrl } from '@/api/songs'
 import MusicList from '@/components/common/song/MusicList'
 export default {
-  mixins: [singerMixin],
+  mixins: [musicMixin],
   data() {
     return {
       songs: null, // 歌曲数组

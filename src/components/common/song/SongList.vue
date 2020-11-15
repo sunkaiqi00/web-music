@@ -5,7 +5,7 @@
         <div class="rank" v-show="rank">
           <span :class="getRankClass(index)">{{getRankNum(index)}}</span>
         </div>
-        <div class="ranknum" v-show="!rank">{{index+1}}.</div>
+        <div class="ranknum" v-show="number">{{index+1}}.</div>
         <div class="content">
           <div class="singer-name">{{item.name}}</div>
           <p class="desc">{{item.singer + ' - ' + item.album}}</p>
@@ -24,6 +24,10 @@ export default {
     rank: {
       type: Boolean,
       default: false,
+    },
+    number: {
+      type: Boolean,
+      default: true,
     },
   },
   methods: {

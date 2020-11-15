@@ -22,25 +22,6 @@ export function shuffle(array) {
   return array;
 }
 
-function getType(data) {
-  return Object.prototype.toString.call(data).slice(8, -1);
-}
-// 深拷贝
-export function copy(data) {
-  let res;
-  if (getType(data) === 'Object') {
-    res = {};
-  } else if (getType(data) === 'Array') {
-    res = [];
-  } else {
-    return data;
-  }
-  for (const [key, val] of Object.entries(data)) {
-    res[key] = typeof val == 'object' ? copy(val) : val;
-  }
-  return res;
-}
-
 export function find_index(list, item) {
   return list.findIndex(song => song.id === item.id);
 }
@@ -60,9 +41,11 @@ export function throttle(fun, delay) {
 
 //
 export function insertArr(arr, key) {
-  const MAX_LENGTH = 15;
-  let fdIndex = arr.findIndex(item => item === key);
-  if (fdIndex === 0) return;
+  const MAX_LENGTH = 10;
+  let fdIndex = arr.findIndex(item => item.id === key.id);
+  if (fdIndex === 0) {
+    return arr;
+  }
   if (fdIndex > 0) {
     arr.splice(fdIndex, 1);
   }

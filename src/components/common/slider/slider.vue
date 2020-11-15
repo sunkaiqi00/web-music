@@ -209,7 +209,7 @@ export default {
       &.active {
         width: 8px;
         height: 8px;
-        background: $color-text-ll;
+        background: $color-light;
       }
     }
   }

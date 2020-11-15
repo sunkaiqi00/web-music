@@ -31,7 +31,7 @@
           </div>
         </div>
       </li>
-      <div class="loading-container" v-show="hasMore">
+      <div class="loading-container" v-show="hasMore&&keywords">
         <loading :titleShow="false"></loading>
       </div>
       <div class="no-nothing-wrapper" v-show="!hasMore&&!list.length">
@@ -47,11 +47,11 @@ import { createSong, isValidMusic, processSongsUrl } from '@/api/songs'
 import scroll from '@/components/common/scroll/scroll'
 import loading from '@/components/common/loading/loading'
 import nothing from '@/components/common/loading/nothing'
-import { singerMixin } from '@/utils/mixin'
+import { musicMixin } from '@/utils/mixin'
 const TYPE_SINGER = 'singer'
 const PERPAGE = 20 //一次请求多少数据
 export default {
-  mixins: [singerMixin],
+  mixins: [musicMixin],
   props: {
     keywords: {
       type: String,
@@ -77,11 +77,16 @@ export default {
     nothing,
   },
   methods: {
+    refresh() {
+      this.$refs.keywordsuggest.refresh()
+    },
+    // 搜索列表滚动向父组件派发事件 让输入框失去焦点
     before_Scroll() {
       this.$emit('suggestScroll')
     },
     // 点击搜索信息
     displaySong(item) {
+      // 将这个搜索历史缓存
       this.$emit('search_History', `${item.name} ${item.singer}`)
       //  歌手 调转到详情页
       if (item.type === TYPE_SINGER) {
@@ -114,7 +119,7 @@ export default {
       if (item.type === TYPE_SINGER) {
         return item.singername
       } else {
-        return `${item.name}-${item.singer}`
+        return `${item.name} - ${item.singer}`
       }
     },
     avatar(singerid) {

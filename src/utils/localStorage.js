@@ -1,5 +1,5 @@
 import Storage from 'web-storage-cache';
-import { SEARCHHISTORY } from './const';
+import { SEARCHHISTORY, PLAYHISTORY } from './const';
 const localStorage = new Storage();
 
 export function setLocalStorage(key, value) {
@@ -12,16 +12,10 @@ export function getLocalStorage(key) {
 //   return localStorage.delete(key);
 // }
 export function removeLocalStorage(qq, key) {
-  return new Promise((resolve, reject) => {
-    let data = getLocalStorage(`qq-${qq}`);
-    let code = delete data[key];
-    setLocalStorage(`qq-${qq}`, data);
-    if (code) {
-      resolve(0);
-    } else {
-      reject(1);
-    }
-  });
+  let data = getLocalStorage(`qq-${qq}`);
+  let code = delete data[key];
+  setLocalStorage(`qq-${qq}`, data);
+  return Promise.resolve(code);
 }
 export function clearLocalStorage() {
   return localStorage.clear();
@@ -54,4 +48,13 @@ export function saveSearchHistory(qq, history) {
 // 获取搜索历史
 export function getSearchHistory(qq) {
   return getUserInfo(qq, SEARCHHISTORY);
+}
+
+// 储存播放历史
+export function savePlayHistory(qq, playList) {
+  return setUserInfo(qq, PLAYHISTORY, playList);
+}
+// 获取播放历史
+export function getPlayHistory(qq) {
+  return getUserInfo(qq, PLAYHISTORY);
 }

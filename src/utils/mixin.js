@@ -1,7 +1,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { copy, shuffle, find_index } from '@/utils/utils';
+import { shuffle, find_index } from '@/utils/utils';
 
-export const singerMixin = {
+export const musicMixin = {
   computed: {
     ...mapGetters([
       'singer',
@@ -14,7 +14,11 @@ export const singerMixin = {
       'currentSong',
       'popularSongs',
       'topList'
-    ])
+    ]),
+    // 播放模式  0 顺序   1 单曲   2 随机
+    playMode() {
+      return this.mode === 0 ? 'icon-sequence' : this.mode === 1 ? 'icon-loop' : 'icon-random';
+    }
   },
   methods: {
     ...mapMutations([
@@ -39,13 +43,31 @@ export const singerMixin = {
       'setPopularSongs',
       'setTopList'
     ]),
+    // 修改播放模式
+    changeMode() {
+      let mode = (this.mode + 1) % 3;
+      this.setMode(mode);
+      let list = [];
+      if (this.mode === 2) {
+        // 随机播放 对歌曲列表重新排序
+        list = shuffle(this.playList);
+      } else {
+        list = this.playList;
+      }
+      this.setPlayList(list);
+      // 模式来回切换的同时 currentIndex重新获取
+      this.setCurrentIndex(this.resetCurrentIndex(list));
+    },
+    resetCurrentIndex(list) {
+      return list.findIndex(item => item.id === this.currentSong.id);
+    },
     // 歌手详情页 点击歌曲初始化
     initPlaySong(songs, index) {
-      let list = copy(songs);
+      let list = songs.slice(0);
       this.setSequenceList(list);
       // 考虑当前是否随机播放
       if (this.mode === 2) {
-        let randomList = copy(songs);
+        let randomList = songs.slice(0);
         this.setPlayList(shuffle(randomList));
         index = find_index(randomList, list[index]);
       } else {
@@ -57,9 +79,9 @@ export const singerMixin = {
     // 歌手详情页 点击随机播放初始化
     RandomPlat(songs) {
       this.setMode(2);
-      let sequenceList = copy(songs);
+      let sequenceList = songs.slice(0);
       this.setSequenceList(sequenceList);
-      let playList = copy(songs);
+      let playList = songs.slice(0);
       this.setPlayList(shuffle(playList));
       let index = Math.floor(Math.random() * songs.length);
       this.setCurrentIndex(index);
@@ -117,9 +139,34 @@ export const singerMixin = {
       this.SET_CURRENTINDEX(now_p_currentIndex);
       this.setPlay(true);
     },
-    handlePlayList(list) {
-      console.log(list);
-    }
+    // 删除一首歌
+    deleteSong(song) {
+      let p_list = this.playList.slice(0);
+      let s_list = this.sequenceList.slice(0);
+      let c_index = this.currentIndex;
+      let p_index = find_index(p_list, song);
+      let s_index = find_index(s_list, song);
+      p_list.splice(p_index, 1);
+      s_list.splice(s_index, 1);
+      if (c_index > p_index) {
+        c_index--;
+      }
+
+      if (p_list.length === 0) {
+        this.setPlay(false);
+      }
+      this.setCurrentIndex(c_index);
+      this.setPlayList(p_list);
+      this.setSequenceList(s_list);
+    },
+    // 删除播放列表
+    clearSongList() {
+      this.setPlayList([]);
+      this.setSequenceList([]);
+      this.setCurrentIndex(0);
+      this.setPlay(false);
+    },
+    handlePlayList(list) {}
   },
   mounted() {
     this.handlePlayList(this.playList);
@@ -136,10 +183,10 @@ export const singerMixin = {
 
 export const userMixin = {
   computed: {
-    ...mapGetters(['qq_num', 'searchHistory'])
+    ...mapGetters(['qq_num', 'searchHistory', 'playHistory'])
   },
   methods: {
-    ...mapMutations(['SET_SEARCH_HISTORY']),
-    ...mapActions(['setSearchHistory'])
+    ...mapMutations(['SET_SEARCH_HISTORY', 'SET_PLAYHISTORY']),
+    ...mapActions(['setSearchHistory', 'setPlayHistory'])
   }
 };

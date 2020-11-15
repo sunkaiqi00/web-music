@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import singer from './singer/singer';
+import music from './music/music';
 import user from './user/user';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    singer,
+    music,
     user
   }
 });

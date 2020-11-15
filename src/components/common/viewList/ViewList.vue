@@ -51,12 +51,12 @@
 import scroll from '@/components/common/scroll/scroll'
 
 import { attribute } from '@/utils/dom'
-import { singerMixin } from '@/utils/mixin'
+import { musicMixin } from '@/utils/mixin'
 const ONE_CHURT_CUT_HEIGHT = 18
 const FIXED_TITLE_HEIGHT = 33
 
 export default {
-  mixins: [singerMixin],
+  mixins: [musicMixin],
   props: {
     data: {
       type: Array,

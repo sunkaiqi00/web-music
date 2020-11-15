@@ -1,5 +1,6 @@
 const { resolve } = require('path');
 module.exports = {
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   chainWebpack: config => {
     config.resolve.alias.set('assets', resolve('src/assets'));
     config.resolve.symlinks(true);
