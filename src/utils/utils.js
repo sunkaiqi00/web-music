@@ -40,18 +40,21 @@ export function throttle(fun, delay) {
 }
 
 //
-export function insertArr(arr, key) {
+export function insertArr(arr, song, fun, openMax = true) {
   const MAX_LENGTH = 10;
-  let fdIndex = arr.findIndex(item => item.id === key.id);
+  let fdIndex = arr.findIndex(fun);
+  // let fdIndex = arr.findIndex(v => v === item);
   if (fdIndex === 0) {
     return arr;
   }
   if (fdIndex > 0) {
     arr.splice(fdIndex, 1);
   }
-  arr.unshift(key);
-  if (arr.length > MAX_LENGTH) {
-    arr.pop();
+  arr.unshift(song);
+  if (openMax) {
+    if (arr.length > MAX_LENGTH) {
+      arr.pop();
+    }
   }
   return arr;
 }

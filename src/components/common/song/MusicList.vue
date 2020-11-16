@@ -241,6 +241,7 @@ export default {
     position: relative;
     height: 100%;
     background: $color-background;
+    border-radius: 10px;
   }
 
   .song-list-scroll {

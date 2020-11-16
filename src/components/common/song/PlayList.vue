@@ -10,7 +10,7 @@
             <span class="iconfont icon-clear" @click.stop="showToast"></span>
           </div>
         </div>
-        <scroll class="list-content" ref="listContent">
+        <scroll class="list-content" ref="listContent" :refreshDelay="100">
           <transition-group name="list" tag="ul">
             <li class="item" ref="listItem" v-for="(item,index) in sequenceList" :key="item.id">
               <div
@@ -227,7 +227,8 @@ export default {
         }
 
         &.list-enter, &.list-leave-to {
-          height: 0;
+          opacity: 0;
+          transform: translateX(10px);
         }
 
         .current-icon {

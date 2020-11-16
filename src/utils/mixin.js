@@ -1,6 +1,8 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { shuffle, find_index } from '@/utils/utils';
-
+import { saveSearchHistory, getSearchHistory, removeLocalStorage } from '@/utils/localStorage';
+import { insertArr } from '@/utils/utils';
+import { SEARCHHISTORY } from '@/utils/const';
 export const musicMixin = {
   computed: {
     ...mapGetters([
@@ -187,6 +189,37 @@ export const userMixin = {
   },
   methods: {
     ...mapMutations(['SET_SEARCH_HISTORY', 'SET_PLAYHISTORY']),
-    ...mapActions(['setSearchHistory', 'setPlayHistory'])
+    ...mapActions(['setSearchHistory', 'setPlayHistory']),
+    // 点击热门搜索 设置输入框内容
+    serachHotKey(k) {
+      this.$refs.searchBar.setQuery(k);
+    },
+    showToast() {
+      this.$refs.toast.show();
+    },
+    // 清楚全部搜索历史
+    clearAll() {
+      removeLocalStorage(this.qq_num, SEARCHHISTORY).then(res => {
+        if (res) {
+          this.setSearchHistory([]);
+        }
+      });
+    },
+    // 单个删除 搜索历史
+    deleteOne(key) {
+      // 缓存取搜素历史
+      let searchList = getSearchHistory(this.qq_num).filter(item => item !== key);
+      this.setSearchHistory(searchList);
+      saveSearchHistory(this.qq_num, searchList);
+    },
+    // 搜索列表点击搜索 保存关键词
+    search_History(keywords) {
+      // console.log(keywords)
+      let search = insertArr(this.searchHistory, keywords, item => {
+        return item === keywords;
+      });
+      this.setSearchHistory(search);
+      saveSearchHistory(this.qq_num, search);
+    }
   }
 };

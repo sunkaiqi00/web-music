@@ -32,10 +32,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    refreshDelay: {
+      type: Number,
+      default: 20,
+    },
   },
   watch: {
     data() {
-      this.refresh()
+      setTimeout(() => {
+        this.refresh()
+      }, this.refreshDelay)
     },
   },
   methods: {

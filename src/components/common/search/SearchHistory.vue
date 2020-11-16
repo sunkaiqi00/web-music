@@ -1,13 +1,13 @@
 <template>
   <div class="search-history-wrapper">
     <div class="title">
-      <div class="text">搜索历史</div>
-      <div class="clear" @click="clearAll">
+      <div class="text" v-show="showTitle&&searchHistory_List.length">搜索历史</div>
+      <div class="clear" @click="clearAll" v-show="showClear&&searchHistory_List.length">
         <span class="iconfont icon-clear"></span>
       </div>
     </div>
     <div class="search-list">
-      <ul>
+      <transition-group name="list" tag="ul" :refreshDelay="100">
         <li
           class="search-item"
           @click="searchKey(item)"
@@ -19,7 +19,7 @@
             <span class="iconfont icon-delete"></span>
           </div>
         </li>
-      </ul>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -28,7 +28,15 @@ export default {
   props: {
     searchHistory_List: {
       type: Array,
-      default: null,
+      default: [],
+    },
+    showTitle: {
+      type: Boolean,
+      default: true,
+    },
+    showClear: {
+      type: Boolean,
+      default: true,
     },
   },
   methods: {
@@ -89,6 +97,15 @@ export default {
       align-items: center;
       padding: 6px 0;
       font-size: $font-size-small;
+
+      &.list-enter-active, &.list-leave-active {
+        transition: all 0.1s;
+      }
+
+      &.list-enter, &.list-leave-to {
+        opacity: 0;
+        transform: translateX(10px);
+      }
 
       .search-key {
         flex: 16;

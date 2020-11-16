@@ -15,7 +15,7 @@
           @emitkeywords="emitkeywords"
         ></search-bar>
       </div>
-      <div class="shortcut-wrapper">
+      <div class="shortcut-wrapper" v-show="!keywords">
         <div class="shortcut-tab-wrapper">
           <div class="shortcut-tab" :class="{'active':active}">
             <input type="radio" value="RecentlyPlay" v-model="view" id="recentlyPlay" />
@@ -27,11 +27,19 @@
           </div>
         </div>
         <div class="recently-play-wrapper">
-          <scroll class="recently-play-scroll" :data="playHistory" v-if="active">
+          <scroll ref="play_history" class="recently-play-scroll" :data="playHistory" v-if="active">
             <div class="recently-play-inner">
-              <song-list :songs="playHistory" :number="false"></song-list>
+              <song-list :songs="playHistory" :number="false" @onPlay="onPlay"></song-list>
             </div>
           </scroll>
+          <search-history
+            @clearAll="showToast"
+            @deleteOne="deleteOne"
+            @serachHotKey="serachHotKey"
+            :searchHistory_List="searchHistory"
+            v-if="!active"
+            :showTitle="false"
+          ></search-history>
         </div>
       </div>
       <div class="search-result" v-show="keywords">
@@ -39,9 +47,12 @@
           @suggestScroll="suggestScroll"
           @search_History="search_History"
           :keywords="keywords"
-          :showSinger="false"
         ></keywords-suggest>
       </div>
+      <confirm-toast ref="toast" :title="title" @confirm="clearAll"></confirm-toast>
+      <dialong ref="dialong">
+        <span>添加成功</span>
+      </dialong>
     </div>
   </transition>
 </template>
@@ -50,10 +61,14 @@ import searchBar from '../search/SearchBar'
 import keywordsSuggest from '../search/KeywordsSuggest'
 import scroll from '@/components/common/scroll/scroll'
 import SongList from '@/components/common/song/SongList'
+import SearchHistory from '../search/SearchHistory'
+import ConfirmToast from '@/components/common/confirmToast/ConfirmToast'
+import dialong from '@/components/common/dialong/dialong'
 import { insertArr } from '@/utils/utils'
 import { saveSearchHistory } from '@/utils/localStorage'
 import { userMixin, musicMixin } from '@/utils/mixin'
 import { getPlayHistory } from '@/utils/localStorage'
+import Song from '@/api/songs'
 export default {
   mixins: [userMixin, musicMixin],
   data() {
@@ -61,6 +76,7 @@ export default {
       showAddSongPage: false,
       keywords: null, // 搜索关键字
       view: 'RecentlyPlay',
+      title: '是否清空所有搜索记录？',
     }
   },
   components: {
@@ -68,6 +84,9 @@ export default {
     keywordsSuggest,
     scroll,
     SongList,
+    SearchHistory,
+    ConfirmToast,
+    dialong,
   },
   computed: {
     active() {
@@ -75,25 +94,35 @@ export default {
     },
   },
   methods: {
+    onPlay(song, index) {
+      this.insertSong(new Song(song))
+      this.$refs.dialong.show()
+    },
     suggestScroll() {
       this.$refs.searchBar.blur()
     },
     search_History(keywords) {
-      // console.log(keywords)
-      let search = insertArr(this.searchHistory, keywords)
+      let search = insertArr(this.searchHistory, keywords, (item) => {
+        return item === keywords
+      })
       this.setSearchHistory(search)
       saveSearchHistory(this.qq_num, search)
+      this.$refs.dialong.show()
     },
     emitkeywords(key) {
       this.keywords = key
     },
     show() {
       this.showAddSongPage = true
+      setTimeout(() => {
+        this.$refs.play_history.refresh()
+      }, 20)
     },
     hide() {
       this.showAddSongPage = false
       this.keywords = null
       this.$refs.searchBar.setQuery(null)
+      this.view = 'RecentlyPlay'
     },
   },
   created() {
@@ -175,7 +204,7 @@ export default {
         center();
         border: 1px solid #bdc3c7;
         box-sizing: border-box;
-        transition: all 0.2s;
+        transition: all 0.1s;
 
         [type='radio'] {
           width: 0;
@@ -211,6 +240,7 @@ export default {
     top: 110px;
     bottom: 0;
     width: 100%;
+    background: #fff;
   }
 
   .tip-title {

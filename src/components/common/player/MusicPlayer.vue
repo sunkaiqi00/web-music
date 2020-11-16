@@ -194,7 +194,14 @@ export default {
       if (!play_history) {
         play_history = []
       }
-      let list = insertArr(play_history, this.currentSong)
+      let list = insertArr(
+        play_history,
+        this.currentSong,
+        (item) => {
+          return item.id === this.currentSong.id
+        },
+        false
+      )
       savePlayHistory(this.qq_num, list)
       this.setPlayHistory(list)
     },
