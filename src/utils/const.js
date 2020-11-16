@@ -1,3 +1,4 @@
 const SEARCHHISTORY = 'searchHistory';
 const PLAYHISTORY = 'playHistory';
-export { SEARCHHISTORY, PLAYHISTORY };
+const FAVORITESONGS = 'favoriteSongs';
+export { SEARCHHISTORY, PLAYHISTORY, FAVORITESONGS };

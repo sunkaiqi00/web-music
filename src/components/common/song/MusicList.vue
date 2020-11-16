@@ -11,7 +11,7 @@
       ref="singerImage"
     >
       <div class="filter" :class="{'opacity':isOpacity}"></div>
-      <div class="play-wrapper" v-show="songs&&!isChangeHeight">
+      <div class="play-wrapper" v-show="songs&&!isChangeHeight" ref="playControl">
         <div class="play" @click="randomPlay">
           <span class="iconfont icon-play"></span>
           <span class="text">随机播放</span>
@@ -27,7 +27,7 @@
       ref="songList"
     >
       <div class="song-list-wrapper">
-        <song-list :rank="rank" :songs="songs" @onPlay="onPlay"></song-list>
+        <song-list :rank="rank" :songs="songs" @onPlay="onPlay" :number="number"></song-list>
       </div>
     </scroll>
     <loading v-if="!songs" class="loading"></loading>
@@ -56,6 +56,10 @@ export default {
     rank: {
       type: Boolean,
       default: false,
+    },
+    number: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

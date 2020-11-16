@@ -39,11 +39,8 @@ export function throttle(fun, delay) {
   };
 }
 
-//
-export function insertArr(arr, song, fun, openMax = true) {
-  const MAX_LENGTH = 10;
+export function insertArr(arr, song, fun, maxLength) {
   let fdIndex = arr.findIndex(fun);
-  // let fdIndex = arr.findIndex(v => v === item);
   if (fdIndex === 0) {
     return arr;
   }
@@ -51,10 +48,8 @@ export function insertArr(arr, song, fun, openMax = true) {
     arr.splice(fdIndex, 1);
   }
   arr.unshift(song);
-  if (openMax) {
-    if (arr.length > MAX_LENGTH) {
-      arr.pop();
-    }
+  if (arr.length > maxLength) {
+    arr.pop();
   }
   return arr;
 }

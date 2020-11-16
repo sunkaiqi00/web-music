@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-right">
-    <music-list :rank="true" :title="title" :bgImage="topListImage" :songs="songs"></music-list>
+    <music-list :rank="true" :title="title" :bgImage="topListImage" :songs="songs" :number="false"></music-list>
   </transition>
 </template>
 <script>

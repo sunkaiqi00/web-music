@@ -4,5 +4,8 @@ export default {
   },
   SET_PLAYHISTORY(state, playHistory) {
     state.playHistory = playHistory;
+  },
+  SET_FAVORITESONGS(state, favoriteSongs) {
+    state.favoriteSongs = favoriteSongs;
   }
 };

@@ -40,14 +40,8 @@
 <script>
 import { getHotKey } from '@/api/request'
 import { ERR_OK } from '@/api/config'
-import {
-  // saveSearchHistory,
-  getSearchHistory,
-  // removeLocalStorage,
-} from '@/utils/localStorage'
-// import { SEARCHHISTORY } from '@/utils/const'
+import { getSearchHistory } from '@/utils/localStorage'
 import { userMixin, musicMixin } from '@/utils/mixin'
-// import { insertArr } from '@/utils/utils'
 import SearchBar from '@/components/common/search/SearchBar'
 import KeywordsSuggest from '@/components/common/search/KeywordsSuggest'
 import SearchHistory from '@/components/common/search/SearchHistory'
@@ -146,11 +140,6 @@ export default {
   },
   created() {
     this._getHotKey()
-    // 查询本地存储搜索历史 初始vuex中保存的搜索历史
-    let initSearch = getSearchHistory(this.qq_num)
-      ? getSearchHistory(this.qq_num)
-      : []
-    this.setSearchHistory(initSearch)
   },
 }
 </script>

@@ -84,7 +84,11 @@
               ></span>
             </div>
             <div class="icon i-right">
-              <span class="iconfont icon-no-favorite"></span>
+              <span
+                class="iconfont"
+                :class="getFavoriteIcon(currentSong)"
+                @click.stop="toggalFavorite(currentSong)"
+              ></span>
             </div>
           </div>
         </div>
@@ -200,7 +204,7 @@ export default {
         (item) => {
           return item.id === this.currentSong.id
         },
-        false
+        200
       )
       savePlayHistory(this.qq_num, list)
       this.setPlayHistory(list)

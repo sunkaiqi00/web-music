@@ -67,7 +67,6 @@ import dialong from '@/components/common/dialong/dialong'
 import { insertArr } from '@/utils/utils'
 import { saveSearchHistory } from '@/utils/localStorage'
 import { userMixin, musicMixin } from '@/utils/mixin'
-import { getPlayHistory } from '@/utils/localStorage'
 import Song from '@/api/songs'
 export default {
   mixins: [userMixin, musicMixin],
@@ -124,11 +123,6 @@ export default {
       this.$refs.searchBar.setQuery(null)
       this.view = 'RecentlyPlay'
     },
-  },
-  created() {
-    // 向vuex中播放历史 从本地初始化
-    let list = getPlayHistory(this.qq_num)
-    this.setPlayHistory(list)
   },
 }
 </script>

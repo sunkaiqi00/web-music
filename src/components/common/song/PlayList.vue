@@ -21,7 +21,11 @@
                 <span class="current-icon" :class="currentIcon(item)"></span>
                 <span class="song-msg">{{item.name + ' - ' + item.singer}}</span>
               </div>
-              <span class="iconfont icon-no-favorite"></span>
+              <span
+                class="iconfont"
+                :class="getFavoriteIcon(item)"
+                @click.stop="toggalFavorite(item)"
+              ></span>
               <span class="iconfont icon-delete" @click.stop="deleteOneSong(item)"></span>
             </li>
           </transition-group>
@@ -36,12 +40,12 @@
   </transition>
 </template>
 <script>
-import { musicMixin } from '@/utils/mixin'
+import { musicMixin, userMixin } from '@/utils/mixin'
 import scroll from '@/components/common/scroll/scroll'
 import ConfirmToast from '@/components/common/confirmToast/ConfirmToast'
 import AddSong from './AddSong'
 export default {
-  mixins: [musicMixin],
+  mixins: [musicMixin, userMixin],
   data() {
     return {
       showPayList: false,
@@ -259,10 +263,15 @@ export default {
           }
         }
 
-        .icon-no-favorite {
+        .icon-no-favorite, .icon-favorite {
           margin-right: 18px;
           font-size: $font-size-medium;
           color: $text-dark;
+        }
+
+        .icon-favorite {
+          color: #f00;
+          font-size: $font-size-large;
         }
 
         .icon-delete {

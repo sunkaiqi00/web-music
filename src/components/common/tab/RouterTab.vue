@@ -1,5 +1,8 @@
 <template>
   <div class="tab">
+    <router-link tag="div" class="tab-item" to="/home/profile">
+      <span class="tab-link">我的</span>
+    </router-link>
     <router-link tag="div" class="tab-item" to="/home/recommend">
       <span class="tab-link">推荐</span>
     </router-link>
@@ -8,9 +11,6 @@
     </router-link>
     <router-link tag="div" class="tab-item" to="/home/rank">
       <span class="tab-link">排行</span>
-    </router-link>
-    <router-link tag="div" class="tab-item" to="/home/profile">
-      <span class="tab-link">我的</span>
     </router-link>
   </div>
 </template>

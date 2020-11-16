@@ -1,5 +1,5 @@
 import Storage from 'web-storage-cache';
-import { SEARCHHISTORY, PLAYHISTORY } from './const';
+import { SEARCHHISTORY, PLAYHISTORY, FAVORITESONGS } from './const';
 const localStorage = new Storage();
 
 export function setLocalStorage(key, value) {
@@ -57,4 +57,12 @@ export function savePlayHistory(qq, playList) {
 // 获取播放历史
 export function getPlayHistory(qq) {
   return getUserInfo(qq, PLAYHISTORY);
+}
+// 存储喜欢歌单
+export function saveFavoriteSongs(qq, favoriteSongs) {
+  return setUserInfo(qq, FAVORITESONGS, favoriteSongs);
+}
+// 获取喜欢歌单
+export function getFavoriteSongs(qq) {
+  return getUserInfo(qq, FAVORITESONGS);
 }

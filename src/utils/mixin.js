@@ -1,8 +1,15 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { shuffle, find_index } from '@/utils/utils';
-import { saveSearchHistory, getSearchHistory, removeLocalStorage } from '@/utils/localStorage';
+import Song from '@/api/songs';
+import {
+  saveSearchHistory,
+  getSearchHistory,
+  removeLocalStorage,
+  saveFavoriteSongs
+} from '@/utils/localStorage';
 import { insertArr } from '@/utils/utils';
 import { SEARCHHISTORY } from '@/utils/const';
+import { getFavoriteSongs } from './localStorage';
 export const musicMixin = {
   computed: {
     ...mapGetters([
@@ -88,6 +95,15 @@ export const musicMixin = {
       let index = Math.floor(Math.random() * songs.length);
       this.setCurrentIndex(index);
       this.setPlay(true);
+    },
+    // 全部播放
+    playList_All(songs) {
+      let list = songs.map(item => new Song(item));
+      this.setPlayList(list.slice(0));
+      this.setSequenceList(list.slice(0));
+      this.setMode(0);
+      this.setPlay(true);
+      this.setCurrentIndex(0);
     },
     // 搜索列表点击播放歌曲
     insertSong(song) {
@@ -185,11 +201,11 @@ export const musicMixin = {
 
 export const userMixin = {
   computed: {
-    ...mapGetters(['qq_num', 'searchHistory', 'playHistory'])
+    ...mapGetters(['qq_num', 'searchHistory', 'playHistory', 'favoriteSongs'])
   },
   methods: {
-    ...mapMutations(['SET_SEARCH_HISTORY', 'SET_PLAYHISTORY']),
-    ...mapActions(['setSearchHistory', 'setPlayHistory']),
+    ...mapMutations(['SET_SEARCH_HISTORY', 'SET_PLAYHISTORY', 'SET_FAVORITESONGS']),
+    ...mapActions(['setSearchHistory', 'setPlayHistory', 'setFavoriteSongs']),
     // 点击热门搜索 设置输入框内容
     serachHotKey(k) {
       this.$refs.searchBar.setQuery(k);
@@ -215,11 +231,34 @@ export const userMixin = {
     // 搜索列表点击搜索 保存关键词
     search_History(keywords) {
       // console.log(keywords)
-      let search = insertArr(this.searchHistory, keywords, item => {
-        return item === keywords;
-      });
+      let search = insertArr(
+        this.searchHistory,
+        keywords,
+        item => {
+          return item === keywords;
+        },
+        12
+      );
       this.setSearchHistory(search);
       saveSearchHistory(this.qq_num, search);
+    },
+    // 切换 喜欢
+    toggalFavorite(song) {
+      let list = this.favoriteSongs.slice(0);
+      if (this.isFavorite(song)) {
+        list = list.filter(item => item.id !== song.id);
+      } else {
+        list.unshift(song);
+      }
+      this.setFavoriteSongs(list);
+      saveFavoriteSongs(this.qq_num, list);
+    },
+    getFavoriteIcon(song) {
+      return this.isFavorite(song) ? 'icon-favorite' : 'icon-no-favorite';
+    },
+    isFavorite(song) {
+      let index = this.favoriteSongs.findIndex(item => item.id === song.id);
+      return index > -1;
     }
   }
 };
