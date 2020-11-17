@@ -7,5 +7,8 @@ export default {
   },
   SET_FAVORITESONGS(state, favoriteSongs) {
     state.favoriteSongs = favoriteSongs;
+  },
+  SET_EDITSTATE(state, editState) {
+    state.editState = editState;
   }
 };

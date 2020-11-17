@@ -181,7 +181,9 @@ export default {
     },
     // 播放 暂停
     switchMusic() {
+      this.currentTime = this.playTime
       this.setPlay(!this.play)
+
       if (this.currentLyric) {
         // 播放 暂停 歌词一样
         this.currentLyric.togglePlay()
@@ -194,7 +196,7 @@ export default {
     ready() {
       this.musicReady = true
       // 存储播放的歌曲
-      let play_history = getPlayHistory(this.qq_num)
+      let play_history = getPlayHistory()
       if (!play_history) {
         play_history = []
       }
@@ -206,7 +208,7 @@ export default {
         },
         200
       )
-      savePlayHistory(this.qq_num, list)
+      savePlayHistory(list)
       this.setPlayHistory(list)
     },
     // 播放结束
@@ -268,6 +270,7 @@ export default {
     // 更新播放时间
     updataTime(e) {
       this.currentTime = e.target.currentTime
+      this.setPlayTime(this.currentTime)
     },
     // 转换时间格式
     format(time) {
@@ -407,6 +410,8 @@ export default {
   },
   mounted() {
     this.audio = this.$refs.audio
+    this.$refs.audio.currentTime = this.playTime
+    this.currentTime = this.playTime
   },
 }
 </script>

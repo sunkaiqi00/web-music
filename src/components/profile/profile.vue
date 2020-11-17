@@ -8,10 +8,10 @@
       </div>
       <div class="profile-brief-msg-wrapper">
         <div class="profile-avatar">
-          <img src="@/assets/image/useravatar.jpg" alt />
+          <img src="@/assets/image/useravatar.png" alt />
         </div>
         <div class="profile-userinfo">
-          <span class="username">孙凯琪</span>
+          <span class="username">NAME</span>
           <span class="user-level">Lv.1</span>
         </div>
         <div class="go-profile-page">
@@ -39,23 +39,46 @@
         </div>
       </div>
     </div>
-    <user-pay-list ref="userPaylist" @onPlay="onPlay" :playlist="songs" :title="title"></user-pay-list>
+    <user-pay-list
+      @deleteChooseSong="deleteChooseSong"
+      ref="userPaylist"
+      @onPlay="onPlay"
+      :playlist="songs"
+      :title="title"
+      :showNothing="showNothing"
+    ></user-pay-list>
+    <dialong ref="dialong">
+      <span>删除成功</span>
+    </dialong>
   </div>
 </template>
 <script>
 import UserPayList from './UserPaylist'
+import dialong from '@/components/common/dialong/dialong'
 import { musicMixin, userMixin } from '@/utils/mixin'
 import Song from '@/api/songs'
+import { saveFavoriteSongs, savePlayHistory } from '@/utils/localStorage'
 export default {
   mixins: [userMixin, musicMixin],
   data() {
     return {
-      title: null,
-      songs: null, // 要展示的歌单
+      title: '',
+      songs: [], // 要展示的歌单
+      EDITPLAYLIST: null,
+      showNothing: 0,
     }
+  },
+  watch: {
+    playlist(newSong) {
+      console.log(newSong)
+    },
+    favoriteSongs(newSong) {
+      this.songs = newSong
+    },
   },
   components: {
     UserPayList,
+    dialong,
   },
   computed: {
     favoriteSongsLength() {
@@ -66,17 +89,39 @@ export default {
     },
   },
   methods: {
+    deleteChooseSong() {
+      let list = this.songs.filter((item) => item.editMode === false)
+      this.songs = list
+      switch (this.EDITPLAYLIST) {
+        case 0:
+          this.setFavoriteSongs(list)
+          saveFavoriteSongs(list)
+          break
+        case 1:
+          this.setPlayHistory(list)
+          savePlayHistory(list)
+          break
+        default:
+          break
+      }
+      this.setEditState(false)
+      this.$refs.dialong.show()
+    },
     onPlay(item, index) {
       this.insertSong(new Song(item))
     },
     showMyFavoritePaylist() {
       this.title = '我喜欢的'
       this.songs = this.favoriteSongs
+      this.EDITPLAYLIST = 0
+      this.showNothing = 0
       this.showuserPaylist()
     },
     showMyRecentlyPaylist() {
       this.title = '最近播放'
       this.songs = this.playHistory
+      this.EDITPLAYLIST = 1
+      this.showNothing = 1
       this.showuserPaylist()
     },
     showuserPaylist() {

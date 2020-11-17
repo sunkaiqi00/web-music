@@ -9,12 +9,12 @@ import {
 } from '@/utils/localStorage';
 import { insertArr } from '@/utils/utils';
 import { SEARCHHISTORY } from '@/utils/const';
-import { getFavoriteSongs } from './localStorage';
 export const musicMixin = {
   computed: {
     ...mapGetters([
       'singer',
       'play',
+      'playTime',
       'fullScreen',
       'playList',
       'sequenceList',
@@ -39,7 +39,8 @@ export const musicMixin = {
       'SET_MODE',
       'SET_CURRENTINDEX',
       'SET_POPULARSONGS',
-      'SET_TOPLIST'
+      'SET_TOPLIST',
+      'SET_PLAYTIME'
     ]),
     ...mapActions([
       'setSinger',
@@ -50,7 +51,8 @@ export const musicMixin = {
       'setMode',
       'setCurrentIndex',
       'setPopularSongs',
-      'setTopList'
+      'setTopList',
+      'setPlayTime'
     ]),
     // 修改播放模式
     changeMode() {
@@ -201,11 +203,16 @@ export const musicMixin = {
 
 export const userMixin = {
   computed: {
-    ...mapGetters(['qq_num', 'searchHistory', 'playHistory', 'favoriteSongs'])
+    ...mapGetters(['searchHistory', 'playHistory', 'favoriteSongs', 'editState'])
   },
   methods: {
-    ...mapMutations(['SET_SEARCH_HISTORY', 'SET_PLAYHISTORY', 'SET_FAVORITESONGS']),
-    ...mapActions(['setSearchHistory', 'setPlayHistory', 'setFavoriteSongs']),
+    ...mapMutations([
+      'SET_SEARCH_HISTORY',
+      'SET_PLAYHISTORY',
+      'SET_FAVORITESONGS',
+      'SET_EDITSTATE'
+    ]),
+    ...mapActions(['setSearchHistory', 'setPlayHistory', 'setFavoriteSongs', 'setEditState']),
     // 点击热门搜索 设置输入框内容
     serachHotKey(k) {
       this.$refs.searchBar.setQuery(k);
@@ -215,18 +222,14 @@ export const userMixin = {
     },
     // 清楚全部搜索历史
     clearAll() {
-      removeLocalStorage(this.qq_num, SEARCHHISTORY).then(res => {
-        if (res) {
-          this.setSearchHistory([]);
-        }
-      });
+      removeLocalStorage(SEARCHHISTORY);
     },
     // 单个删除 搜索历史
     deleteOne(key) {
       // 缓存取搜素历史
-      let searchList = getSearchHistory(this.qq_num).filter(item => item !== key);
+      let searchList = getSearchHistory().filter(item => item !== key);
       this.setSearchHistory(searchList);
-      saveSearchHistory(this.qq_num, searchList);
+      saveSearchHistory(searchList);
     },
     // 搜索列表点击搜索 保存关键词
     search_History(keywords) {
@@ -240,7 +243,7 @@ export const userMixin = {
         12
       );
       this.setSearchHistory(search);
-      saveSearchHistory(this.qq_num, search);
+      saveSearchHistory(search);
     },
     // 切换 喜欢
     toggalFavorite(song) {
@@ -251,7 +254,7 @@ export const userMixin = {
         list.unshift(song);
       }
       this.setFavoriteSongs(list);
-      saveFavoriteSongs(this.qq_num, list);
+      saveFavoriteSongs(list);
     },
     getFavoriteIcon(song) {
       return this.isFavorite(song) ? 'icon-favorite' : 'icon-no-favorite';
@@ -259,6 +262,16 @@ export const userMixin = {
     isFavorite(song) {
       let index = this.favoriteSongs.findIndex(item => item.id === song.id);
       return index > -1;
+    },
+    // 是否选中状态
+    isChoose(song) {
+      return song.editMode;
+    },
+    toogalChoose(song) {
+      if (this.isChoose(song)) {
+        song.editMode = false;
+      }
+      console.log(song);
     }
   }
 };

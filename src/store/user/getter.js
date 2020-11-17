@@ -1,6 +1,6 @@
 export default {
   searchHistory: state => state.searchHistory,
-  qq_num: state => state.qq_num,
   playHistory: state => state.playHistory,
-  favoriteSongs: state => state.favoriteSongs
+  favoriteSongs: state => state.favoriteSongs,
+  editState: state => state.editState
 };

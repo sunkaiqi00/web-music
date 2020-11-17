@@ -43,7 +43,7 @@ export default {
   padding: 6px 20px;
   font-size: $font-size-small;
   border-radius: 15px;
-  z-index: 500;
+  z-index: 2500;
   color: #000;
   background: #ecf0f1;
 

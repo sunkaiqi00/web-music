@@ -14,6 +14,7 @@ export default class Song {
     this.image = image;
     this.filename = `C400${this.mid}.m4a`;
     this.url = url;
+    this.editMode = false;
   }
   async getSongLyric() {
     if (this.lyric) return Promise.resolve(this.lyric);

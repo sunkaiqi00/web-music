@@ -47,6 +47,7 @@
           @suggestScroll="suggestScroll"
           @search_History="search_History"
           :keywords="keywords"
+          :showSinger="false"
         ></keywords-suggest>
       </div>
       <confirm-toast ref="toast" :title="title" @confirm="clearAll"></confirm-toast>
@@ -105,7 +106,7 @@ export default {
         return item === keywords
       })
       this.setSearchHistory(search)
-      saveSearchHistory(this.qq_num, search)
+      saveSearchHistory(search)
       this.$refs.dialong.show()
     },
     emitkeywords(key) {

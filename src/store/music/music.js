@@ -5,6 +5,7 @@ const music = {
   state: {
     singer: null,
     play: false, // 播放状态
+    playTime: 0,
     fullScreen: false, //  全屏状态
     playList: [], // 随机播放列表
     sequenceList: [], // 顺序播放列表

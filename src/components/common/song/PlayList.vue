@@ -216,7 +216,7 @@ export default {
 
     .list-content {
       max-height: 320px;
-      min-height: 240px;
+      min-height: 280px;
       overflow: hidden;
 
       .item {

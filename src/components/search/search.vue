@@ -73,35 +73,7 @@ export default {
       this.$refs.searchResult.style.bottom = bottom
       this.$refs.keywords_Suggest.refresh()
     },
-    // showToast() {
-    //   this.$refs.toast.show()
-    // },
-    // // 清楚全部搜索历史
-    // clearAll() {
-    //   removeLocalStorage(this.qq_num, SEARCHHISTORY).then((res) => {
-    //     if (res) {
-    //       this.setSearchHistory([])
-    //     }
-    //   })
-    // },
-    // // 单个删除 搜索历史
-    // deleteOne(key) {
-    //   // 缓存取搜素历史
-    //   let searchList = getSearchHistory(this.qq_num).filter(
-    //     (item) => item !== key
-    //   )
-    //   this.setSearchHistory(searchList)
-    //   saveSearchHistory(this.qq_num, searchList)
-    // },
-    // // 搜索列表点击搜索 保存关键词
-    // search_History(keywords) {
-    //   // console.log(keywords)
-    //   let search = insertArr(this.searchHistory, keywords, (item) => {
-    //     return item === keywords
-    //   })
-    //   this.setSearchHistory(search)
-    //   saveSearchHistory(this.qq_num, search)
-    // },
+
     // 滑动搜索列表  让输入框失去焦点
     suggestScroll() {
       this.$refs.searchBar.blur()
@@ -110,10 +82,7 @@ export default {
     emitkeywords(k) {
       this.keywords = k
     },
-    // 点击热门搜索 设置输入框内容
-    // serachHotKey(k) {
-    //   this.$refs.searchBar.setQuery(k)
-    // },
+
     async _getHotKey() {
       let { code, data } = await getHotKey()
       if (code === ERR_OK) {

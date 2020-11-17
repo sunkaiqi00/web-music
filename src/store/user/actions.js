@@ -7,5 +7,8 @@ export default {
   },
   setFavoriteSongs({ commit }, favoriteSongs) {
     return commit('SET_FAVORITESONGS', favoriteSongs);
+  },
+  setEditState({ commit }, editState) {
+    return commit('SET_EDITSTATE', editState);
   }
 };

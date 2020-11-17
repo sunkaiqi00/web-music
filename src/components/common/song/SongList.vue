@@ -1,21 +1,27 @@
 <template>
   <div class="song-list">
     <ul>
-      <li v-for="(item,index) in songs" :key="index" class="item" @click="onPlay(item,index)">
+      <li v-for="(item,index) in songs" :key="index" class="item">
         <div class="rank" v-show="rank">
           <span :class="getRankClass(index)">{{getRankNum(index)}}</span>
         </div>
         <div class="ranknum" v-show="number">{{index+1}}.</div>
-        <div class="content">
+        <div class="content" @click.stop="onPlay(item,index)">
           <div class="singer-name">{{item.name}}</div>
           <p class="desc">{{item.singer + ' - ' + item.album}}</p>
+        </div>
+        <div class="choose-wrapper" @click.stop="editSongs(item)" v-show="editState">
+          <span class="iconfont icon-choose" v-show="item.editMode"></span>
+          <span class="iconfont icon-no-choose" v-show="!item.editMode"></span>
         </div>
       </li>
     </ul>
   </div>
 </template>
 <script>
+import { userMixin } from '@/utils/mixin'
 export default {
+  mixins: [userMixin],
   props: {
     songs: {
       type: Array,
@@ -31,6 +37,9 @@ export default {
     },
   },
   methods: {
+    editSongs(song) {
+      this.$emit('editPlaylist', song)
+    },
     getRankClass(index) {
       if (index <= 2) {
         return `iconfont icon-no${index + 1}`
@@ -54,6 +63,7 @@ export default {
 
 .song-list {
   .item {
+    position: relative;
     display: flex;
     align-items: center;
     box-sizing: border-box;
@@ -100,7 +110,7 @@ export default {
     }
 
     .content {
-      flex: 1;
+      flex: 0 0 220px;
       height: 100%;
       overflow: hidden;
       line-height: 16px;
@@ -115,6 +125,31 @@ export default {
         no-wrap();
         margin: 6px 0 0 0;
         font-size: 12px;
+        color: $text-gray;
+      }
+    }
+
+    .choose-wrapper {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 7px;
+      box-sizing: border-box;
+      background: transparent;
+
+      // right: 0;
+      // top: 7px;
+      .icon-choose {
+        font-size: 15px;
+        color: red;
+        margin-right: 2px;
+        margin-top: 1px;
+      }
+
+      .icon-no-choose {
+        font-size: 20px;
         color: $text-gray;
       }
     }

@@ -5,6 +5,9 @@ export default {
   SET_PLAY(state, play) {
     state.play = play;
   },
+  SET_PLAYTIME(state, playTime) {
+    state.playTime = playTime;
+  },
   SET_FULLSCREEN(state, fullScreen) {
     state.fullScreen = fullScreen;
   },

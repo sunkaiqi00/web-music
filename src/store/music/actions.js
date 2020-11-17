@@ -5,6 +5,9 @@ export default {
   setPlay({ commit }, play) {
     return commit('SET_PLAY', play);
   },
+  setPlayTime({ commit }, playTime) {
+    return commit('SET_PLAYTIME', playTime);
+  },
   setFullScreen({ commit }, fullScreen) {
     return commit('SET_FULLSCREEN', fullScreen);
   },

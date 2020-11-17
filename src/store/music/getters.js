@@ -1,6 +1,7 @@
 export default {
   singer: state => state.singer,
   play: state => state.play,
+  playTime: state => state.playTime,
   fullScreen: state => state.fullScreen,
   playList: state => state.playList,
   sequenceList: state => state.sequenceList,

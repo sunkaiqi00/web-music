@@ -12,26 +12,53 @@ import {
   getSearchHistory,
   getPlayHistory,
   getFavoriteSongs,
+  saveplayDetail,
+  getplayDetail,
 } from '@/utils/localStorage'
-import { userMixin } from '@/utils/mixin'
+// import { PLAYDETAIL } from '@/utils/const'
+import { userMixin, musicMixin } from '@/utils/mixin'
 export default {
-  mixins: [userMixin],
+  mixins: [userMixin, musicMixin],
   components: {
     MusicPlayer,
   },
+  methods: {
+    initdata() {
+      let seach_history = getSearchHistory() ? getSearchHistory() : []
+      this.setSearchHistory(seach_history)
+      let play_history = getPlayHistory() ? getPlayHistory() : []
+      this.setPlayHistory(play_history)
+      let favorite_songs = getFavoriteSongs() ? getFavoriteSongs() : []
+      this.setFavoriteSongs(favorite_songs)
+    },
+    saveUserPlayDetail() {
+      let THIS = this
+
+      window.onbeforeunload = function (e) {
+        if (!THIS.playList.length && !THIS.sequenceList.length) return
+        let list = {
+          current_index: THIS.currentIndex,
+          mode: THIS.mode,
+          play_list: THIS.playList,
+          play_time: THIS.playTime,
+          sequence_list: THIS.sequenceList,
+        }
+        saveplayDetail(list)
+      }
+    },
+  },
   mounted() {
-    let seach_history = getSearchHistory(this.qq_num)
-      ? getSearchHistory(this.qq_num)
-      : []
-    this.setSearchHistory(seach_history)
-    let play_history = getPlayHistory(this.qq_num)
-      ? getPlayHistory(this.qq_num)
-      : []
-    this.setPlayHistory(play_history)
-    let favorite_songs = getFavoriteSongs(this.qq_num)
-      ? getFavoriteSongs(this.qq_num)
-      : []
-    this.setFavoriteSongs(favorite_songs)
+    this.initdata()
+    this.saveUserPlayDetail()
+  },
+  created() {
+    let detail = getplayDetail()
+    if (!detail) return
+    this.setCurrentIndex(detail.current_index)
+    this.setMode(detail.mode)
+    this.setPlayList(detail.play_list)
+    this.setSequenceList(detail.sequence_list)
+    this.setPlayTime(detail.play_time)
   },
 }
 </script>

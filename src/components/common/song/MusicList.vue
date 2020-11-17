@@ -175,8 +175,8 @@ export default {
     height: 60px;
     transform: translateX(-50%);
     no-wrap();
-    center();
-    font-size: $font-size-medium;
+    line-height: 60px;
+    font-size: $font-size-large;
     color: $text-light;
   }
 
