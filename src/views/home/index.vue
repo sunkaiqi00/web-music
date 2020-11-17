@@ -39,15 +39,21 @@ export default {
   transition: all 0.3s;
 }
 
-.m-header {
-  width: 100vw;
-  height: 44px;
-  color: $text-dark;
-  center();
+.header-tab-wrapper {
+  position: absolute;
+  background: #fff;
+  z-index: 300;
 
-  .text {
-    font-size: $font-size-large-x;
-    font-weight: bold;
+  .m-header {
+    width: 100vw;
+    height: 44px;
+    color: $text-dark;
+    center();
+
+    .text {
+      font-size: $font-size-large-x;
+      font-weight: bold;
+    }
   }
 }
 </style>

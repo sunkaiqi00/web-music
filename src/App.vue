@@ -12,10 +12,11 @@ import {
   getSearchHistory,
   getPlayHistory,
   getFavoriteSongs,
-  saveplayDetail,
-  getplayDetail,
+  savePlayDetail,
+  getPlayDetail,
+  getUserPlayList,
 } from '@/utils/localStorage'
-// import { PLAYDETAIL } from '@/utils/const'
+import Song from '@/api/songs'
 import { userMixin, musicMixin } from '@/utils/mixin'
 export default {
   mixins: [userMixin, musicMixin],
@@ -30,6 +31,8 @@ export default {
       this.setPlayHistory(play_history)
       let favorite_songs = getFavoriteSongs() ? getFavoriteSongs() : []
       this.setFavoriteSongs(favorite_songs)
+      let user_playList = getUserPlayList() ? getUserPlayList() : []
+      this.setUserPlayList(user_playList)
     },
     saveUserPlayDetail() {
       let THIS = this
@@ -43,7 +46,7 @@ export default {
           play_time: THIS.playTime,
           sequence_list: THIS.sequenceList,
         }
-        saveplayDetail(list)
+        savePlayDetail(list)
       }
     },
   },
@@ -52,12 +55,12 @@ export default {
     this.saveUserPlayDetail()
   },
   created() {
-    let detail = getplayDetail()
+    let detail = getPlayDetail()
     if (!detail) return
     this.setCurrentIndex(detail.current_index)
     this.setMode(detail.mode)
-    this.setPlayList(detail.play_list)
-    this.setSequenceList(detail.sequence_list)
+    this.setPlayList(detail.play_list.map((item) => new Song(item)))
+    this.setSequenceList(detail.sequence_list.map((item) => new Song(item)))
     this.setPlayTime(detail.play_time)
   },
 }

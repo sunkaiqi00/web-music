@@ -10,5 +10,11 @@ export default {
   },
   setEditState({ commit }, editState) {
     return commit('SET_EDITSTATE', editState);
+  },
+  setUserPlayList({ commit }, user_playList) {
+    return commit('SET_USER_PLAYLIST', user_playList);
+  },
+  setSelectSongs({ commit }, selectSongs) {
+    return commit('SET_SELECTSONGS', selectSongs);
   }
 };

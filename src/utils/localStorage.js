@@ -1,5 +1,5 @@
 import Storage from 'web-storage-cache';
-import { SEARCHHISTORY, PLAYHISTORY, FAVORITESONGS, PLAYDETAIL } from './const';
+import { SEARCHHISTORY, PLAYHISTORY, FAVORITESONGS, PLAYDETAIL, USERPLAYLIST } from './const';
 const localStorage = new Storage();
 
 export function setLocalStorage(key, value) {
@@ -11,12 +11,7 @@ export function getLocalStorage(key) {
 export function removeLocalStorage(key) {
   return localStorage.delete(key);
 }
-// export function removeLocalStorage(qq, key) {
-//   let data = getLocalStorage(`qq-${qq}`);
-//   let code = delete data[key];
-//   setLocalStorage(`qq-${qq}`, data);
-//   return Promise.resolve(code);
-// }
+
 export function clearLocalStorage() {
   return localStorage.clear();
 }
@@ -67,10 +62,18 @@ export function getFavoriteSongs() {
   return getUserInfo(FAVORITESONGS);
 }
 
-export function saveplayDetail(data) {
+export function savePlayDetail(data) {
   return setUserInfo(PLAYDETAIL, data);
 }
 
-export function getplayDetail() {
+export function getPlayDetail() {
   return getUserInfo(PLAYDETAIL);
+}
+
+export function saveUserPlayList(data) {
+  return setUserInfo(USERPLAYLIST, data);
+}
+
+export function getUserPlayList() {
+  return getUserInfo(USERPLAYLIST);
 }

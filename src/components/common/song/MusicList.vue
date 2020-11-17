@@ -18,6 +18,16 @@
         </div>
       </div>
     </div>
+    <div class="edit-wrapper" v-show="isEdit">
+      <div class="edit-title">
+        <div
+          class="add-to-playlist"
+          :class="{'pointorEvents':!selectorLength}"
+          @click="showAddPopup"
+        >添加到歌单</div>
+        <div class="edit-mode" @click.stop="switchEditMode">{{editText}}</div>
+      </div>
+    </div>
     <div class="bg-layer" ref="layer"></div>
     <scroll
       :listenScroll="listenScroll"
@@ -27,9 +37,20 @@
       ref="songList"
     >
       <div class="song-list-wrapper">
-        <song-list :rank="rank" :songs="songs" @onPlay="onPlay" :number="number"></song-list>
+        <song-list
+          :rank="rank"
+          :songs="songs"
+          @onPlay="onPlay"
+          :number="number"
+          @editPlaylist="editPlaylist"
+        ></song-list>
       </div>
     </scroll>
+    <add-popup
+      ref="addPopup"
+      :_user_playlist="user_playList"
+      @add_this_playlist="add_this_playlist"
+    ></add-popup>
     <loading v-if="!songs" class="loading"></loading>
   </div>
 </template>
@@ -37,9 +58,11 @@
 import scroll from '@/components/common/scroll/scroll'
 import loading from '@/components/common/loading/loading'
 import SongList from './SongList'
-import { musicMixin } from '@/utils/mixin'
+import AddPopup from './AddPopup'
+import { musicMixin, userMixin } from '@/utils/mixin'
+import { saveUserPlayList } from '@/utils/localStorage'
 export default {
-  mixins: [musicMixin],
+  mixins: [musicMixin, userMixin],
   props: {
     songs: {
       type: Array,
@@ -69,14 +92,68 @@ export default {
       isOpacity: false, // 模糊
       // 列表滚动到距离顶部60px 取消图片的padding-top 设置固定高度 提高z-index盖住上滑的列表
       isChangeHeight: false,
+      isEdit: false,
     }
   },
   components: {
     scroll,
     SongList,
     loading,
+    AddPopup,
+  },
+  computed: {
+    editText() {
+      return this.editState ? '取消' : '编辑'
+    },
+    selectorLength() {
+      return this.selectSongs.length > 0
+    },
   },
   methods: {
+    get_playlist_name(item) {
+      return Object.keys(item)[0]
+    },
+    add_this_playlist(playlist) {
+      let _index = this.user_playList.findIndex((item) => {
+        return this.get_playlist_name(item) === this.get_playlist_name(playlist)
+      })
+      let arr = this.user_playList
+        .slice(0)
+        .filter((item, index) => index !== _index)
+      this.selectSongs.map((item) => {
+        playlist[this.get_playlist_name(playlist)].push(item)
+      })
+      let res = [...arr, playlist]
+      this.setUserPlayList(res)
+      saveUserPlayList(res)
+      this.setEditState(false)
+      this.clearSelectSongs()
+    },
+    showAddPopup() {
+      this.$refs.addPopup.show()
+    },
+    // 判断歌曲是都选中状态 选中的添加到select数组
+    editPlaylist(song) {
+      song.editMode = !song.editMode
+      let arr = this.selectSongs
+      if (song.editMode) {
+        arr.push(song)
+      } else {
+        arr = arr.filter((item) => item.id !== song.id)
+      }
+      this.setSelectSongs(arr)
+    },
+    switchEditMode() {
+      this.setEditState(!this.editState)
+      this.clearSelectSongs()
+    },
+    clearSelectSongs() {
+      if (!this.editState) {
+        this.selectSongs.map((item) => (item.editMode = false))
+      }
+      this.setSelectSongs([])
+    },
+
     randomPlay() {
       this.RandomPlat(this.songs)
     },
@@ -91,6 +168,7 @@ export default {
       this.isChangeHeight = false
       this.scrollY = 0
       this.isOpacity = false
+      this.isEdit = false
       if (!this.isChangeHeight) {
         this.$router.go(-1)
       }
@@ -118,6 +196,7 @@ export default {
         this.scrollY = -maxScrollY
         // 向上滑动到了最大位置 修改图片样式
         this.isChangeHeight = true
+        this.isEdit = true
       } else if (newScrollY >= 0) {
         // 禁止向下移动
         this.$refs.layer.style.top = '0'
@@ -133,6 +212,9 @@ export default {
         // 下滑到原本位置过程 修改图片原本样式
         this.isChangeHeight = false
         this.isOpacity = true
+        this.isEdit = false
+        this.setEditState(false)
+        this.clearSelectSongs()
       }
       this.$refs.layer.style.top = `${newScrollY}px`
     },
@@ -141,6 +223,40 @@ export default {
 </script>
 <style scoped lang='stylus'>
 @import '~assets/style/css/global';
+
+.edit-wrapper {
+  position: fixed;
+  top: 55px;
+  z-index: 300;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 10px 10px 0 0;
+
+  .edit-title {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .add-to-playlist {
+      font-size: 13px;
+    }
+
+    .pointorEvents {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .edit-mode {
+      font-size: 13px;
+    }
+  }
+}
 
 .music-list {
   position: fixed;
@@ -176,6 +292,7 @@ export default {
     transform: translateX(-50%);
     no-wrap();
     line-height: 60px;
+    text-align: center;
     font-size: $font-size-large;
     color: $text-light;
   }

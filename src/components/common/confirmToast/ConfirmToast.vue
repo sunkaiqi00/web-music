@@ -61,7 +61,7 @@ export default {
   right: 0;
   top: 0;
   bottom: 0;
-  z-index: 998;
+  z-index: 1998;
   background-color: $color-background-d;
 
   &.confirm-fade-enter-active {

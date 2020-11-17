@@ -18,10 +18,10 @@
           >
             <img v-lazy="item.avatar" class="avatar" />
             <span class="name">{{item.name}}</span>
-            <div class="focus-wrapper">
+            <!-- <div class="focus-wrapper">
               <span class="focus-iconadd">＋</span>
               <span class="focus-title">关注</span>
-            </div>
+            </div>-->
           </li>
         </ul>
       </li>
@@ -60,7 +60,7 @@ export default {
   props: {
     data: {
       type: Array,
-      default: null,
+      default: [],
     },
   },
   data() {
@@ -82,7 +82,7 @@ export default {
       if (this.scrollY > 0) {
         return
       } else if (this.data) {
-        return this.data[this.current_Index].title
+        return this.data.length && this.data[this.current_Index].title
       }
     },
     // 右侧 字母导航
@@ -240,7 +240,7 @@ export default {
         }
 
         .focus-title {
-          font-size: 2px;
+          font-size: 8px;
           margin-right: 2px;
         }
       }

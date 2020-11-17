@@ -203,16 +203,32 @@ export const musicMixin = {
 
 export const userMixin = {
   computed: {
-    ...mapGetters(['searchHistory', 'playHistory', 'favoriteSongs', 'editState'])
+    ...mapGetters([
+      'searchHistory',
+      'playHistory',
+      'favoriteSongs',
+      'editState',
+      'user_playList',
+      'selectSongs'
+    ])
   },
   methods: {
     ...mapMutations([
       'SET_SEARCH_HISTORY',
       'SET_PLAYHISTORY',
       'SET_FAVORITESONGS',
-      'SET_EDITSTATE'
+      'SET_EDITSTATE',
+      'SET_USER_PLAYLIST',
+      'SET_SELECTSONGS'
     ]),
-    ...mapActions(['setSearchHistory', 'setPlayHistory', 'setFavoriteSongs', 'setEditState']),
+    ...mapActions([
+      'setSearchHistory',
+      'setPlayHistory',
+      'setFavoriteSongs',
+      'setEditState',
+      'setUserPlayList',
+      'setSelectSongs'
+    ]),
     // 点击热门搜索 设置输入框内容
     serachHotKey(k) {
       this.$refs.searchBar.setQuery(k);
@@ -271,7 +287,6 @@ export const userMixin = {
       if (this.isChoose(song)) {
         song.editMode = false;
       }
-      console.log(song);
     }
   }
 };

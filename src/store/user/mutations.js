@@ -10,5 +10,11 @@ export default {
   },
   SET_EDITSTATE(state, editState) {
     state.editState = editState;
+  },
+  SET_USER_PLAYLIST(state, user_playList) {
+    state.user_playList = user_playList;
+  },
+  SET_SELECTSONGS(state, selectSongs) {
+    state.selectSongs = selectSongs;
   }
 };

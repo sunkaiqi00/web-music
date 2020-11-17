@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-wrapper">
+  <scroll class="profile-wrapper" ref="profile">
     <div class="profile-user-wrapper">
       <div class="search-wrapper">
         <div class="search-box" @click="goSearchPage">
@@ -38,26 +38,47 @@
           </div>
         </div>
       </div>
+      <div class="user-created-playlist">
+        <div class="user-playlist-title">
+          <div class="title">{{my_playlist_much}}</div>
+          <div class="created-btn" @click.stop="created_play_list">
+            <span class="iconfont icon-add"></span>
+            <span class="created-text">创建歌单</span>
+          </div>
+        </div>
+        <div class="no-playlist" v-show="!user_playList.length">暂无创建歌单</div>
+        <user-playlist :play_list="user_playList" @remove_playlist="showToast"></user-playlist>
+      </div>
     </div>
-    <user-pay-list
+    <playlist-songs
       @deleteChooseSong="deleteChooseSong"
       ref="userPaylist"
       @onPlay="onPlay"
       :playlist="songs"
       :title="title"
       :showNothing="showNothing"
-    ></user-pay-list>
+    ></playlist-songs>
     <dialong ref="dialong">
       <span>删除成功</span>
     </dialong>
-  </div>
+    <popup ref="createdPlaylist" @submit_playList="submit_playList"></popup>
+    <confirm-toast :title="toastTitle" @confirm="remove_playlist" ref="toast"></confirm-toast>
+  </scroll>
 </template>
 <script>
-import UserPayList from './UserPaylist'
+import PlaylistSongs from './PlaylistSongs'
+import UserPlaylist from './UserPlaylist'
 import dialong from '@/components/common/dialong/dialong'
+import popup from '@/components/common/popup/popup'
+import scroll from '@/components/common/scroll/scroll'
+import ConfirmToast from '@/components/common/confirmToast/ConfirmToast'
 import { musicMixin, userMixin } from '@/utils/mixin'
 import Song from '@/api/songs'
-import { saveFavoriteSongs, savePlayHistory } from '@/utils/localStorage'
+import {
+  saveFavoriteSongs,
+  savePlayHistory,
+  saveUserPlayList,
+} from '@/utils/localStorage'
 export default {
   mixins: [userMixin, musicMixin],
   data() {
@@ -66,6 +87,7 @@ export default {
       songs: [], // 要展示的歌单
       EDITPLAYLIST: null,
       showNothing: 0,
+      toastTitle: '删除歌单',
     }
   },
   watch: {
@@ -77,8 +99,12 @@ export default {
     },
   },
   components: {
-    UserPayList,
+    PlaylistSongs,
+    UserPlaylist,
     dialong,
+    popup,
+    scroll,
+    ConfirmToast,
   },
   computed: {
     favoriteSongsLength() {
@@ -87,8 +113,40 @@ export default {
     playHistoryLength() {
       return this.playHistory.length + '首'
     },
+    my_playlist_much() {
+      return `我的歌单(${this.user_playList.length})`
+    },
   },
   methods: {
+    showToast(index) {
+      this.select_playlist = index
+      this.$refs.toast.show()
+    },
+    // 删除歌单  先弹出确认框
+    remove_playlist(index) {
+      this.user_playList.splice(this.select_playlist, 1)
+      let list = this.user_playList
+      this.setUserPlayList(list)
+      saveUserPlayList(list)
+    },
+    // 创建歌单
+    submit_playList(key) {
+      let flag = this.user_playList.some((item) => {
+        item[key] === key
+      })
+      if (!flag) {
+        let data = {
+          [key]: [],
+        }
+        let list = this.user_playList
+        list.unshift(data)
+        this.setUserPlayList(list)
+        saveUserPlayList(list)
+      }
+    },
+    created_play_list() {
+      this.$refs.createdPlaylist.show()
+    },
     deleteChooseSong() {
       let list = this.songs.filter((item) => item.editMode === false)
       this.songs = list
@@ -130,6 +188,10 @@ export default {
     goSearchPage() {
       this.$router.push('/search')
     },
+    handlePlayList(playList) {
+      let bottom = playList.length > 0 ? '80px' : ''
+      this.$refs.profile.$el.style.bottom = bottom
+    },
   },
 }
 </script>
@@ -137,7 +199,7 @@ export default {
 @import '~assets/style/css/global';
 
 .profile-wrapper {
-  position: fixed;
+  position: absolute;
   top: 88px;
   bottom: 0;
   width: 100%;
@@ -306,6 +368,51 @@ export default {
             margin-top: 8px;
           }
         }
+      }
+    }
+
+    .user-created-playlist {
+      width: 100%;
+      box-sizing: border-box;
+      background: #f5f6fa;
+      margin-top: 20px;
+      align-items: center;
+      border-radius: 10px;
+      padding: 10px 20px;
+
+      .user-playlist-title {
+        width: 100%;
+        display: flex;
+        height: 30px;
+        box-sizing: border-box;
+        align-items: center;
+        justify-content: space-between;
+
+        .title {
+          font-size: 14px;
+        }
+
+        .created-btn {
+          padding: 3px 8px;
+          background: #fff;
+          box-sizing: border-box;
+          border-radius: 10px;
+
+          .icon-add {
+            font-size: 12px;
+          }
+
+          .created-text {
+            font-size: 10px;
+          }
+        }
+      }
+
+      .no-playlist {
+        text-align: center;
+        padding: 30px 0;
+        font-size: 12px;
+        color: gray;
       }
     }
   }
