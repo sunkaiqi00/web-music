@@ -42,13 +42,13 @@ better-scroll vue-lazyload postcss-px-to-viewport axios
 
 
 
-<img src="E:\kaihuai\web-music\image\home.png" style="zoom:50%;" />
+<img src="image\home.png" style="zoom:50%;" />
 
-<img src="E:\kaihuai\web-music\image\plalist_management.png" alt="plalist_management" style="zoom:50%;" />
+<img src="image\plalist_management.png" alt="plalist_management" style="zoom:50%;" />
 
-<img src="E:\kaihuai\web-music\image\search_page.png" alt="search_page" style="zoom:50%;" />
+<img src="image\search_page.png" alt="search_page" style="zoom:50%;" />
 
-<img src="E:\kaihuai\web-music\image\search_result.png" alt="search_result" style="zoom:50%;" />
+<img src="image\search_result.png" alt="search_result" style="zoom:50%;" />
 
 
 
@@ -59,11 +59,11 @@ better-scroll vue-lazyload postcss-px-to-viewport axios
 - 查看播放列表按钮
 - 效果图：
 
-<img src="E:\kaihuai\web-music\image\mini_player.png" style="zoom: 67%;" />
+<img src="image\mini_player.png" style="zoom: 67%;" />
 
 
 
-<img src="E:\kaihuai\web-music\image\popup_playlist.png" alt="popup_playlist" style="zoom:50%;" />
+<img src="image\popup_playlist.png" alt="popup_playlist" style="zoom:50%;" />
 
 ###### 3.播放器
 
@@ -77,9 +77,9 @@ better-scroll vue-lazyload postcss-px-to-viewport axios
 
 - 效果图：
 
-  <img src="E:\kaihuai\web-music\image\play_image.png" style="zoom:50%;" />
+  <img src="image\play_image.png" style="zoom:50%;" />
 
-  <img src="E:\kaihuai\web-music\image\play_lyric.png" alt="play_lyric" style="zoom:50%;" />
+  <img src="image\play_lyric.png" alt="play_lyric" style="zoom:50%;" />
 
 ###### 4. 歌手页面
 
@@ -89,7 +89,7 @@ better-scroll vue-lazyload postcss-px-to-viewport axios
 
 - 效果图：
 
-  <img src="E:\kaihuai\web-music\image\singer.png" style="zoom:50%;" />
+  <img src="image\singer.png" style="zoom:50%;" />
 
 ###### 5. 歌手歌单
 
@@ -99,6 +99,6 @@ better-scroll vue-lazyload postcss-px-to-viewport axios
 
 - 效果图：
 
-  <img src="E:\kaihuai\web-music\image\addplaylist.png" style="zoom:50%;" />
+  <img src="image\addplaylist.png" style="zoom:50%;" />
 
-  <img src="E:\kaihuai\web-music\image\singer_playlist.png" alt="singer_playlist" style="zoom:50%;" />
+  <img src="image\singer_playlist.png" alt="singer_playlist" style="zoom:50%;" />
