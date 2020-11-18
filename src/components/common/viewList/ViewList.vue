@@ -82,7 +82,7 @@ export default {
       if (this.scrollY > 0) {
         return
       } else if (this.data) {
-        return this.data.length && this.data[this.current_Index].title
+        return this.data.length > 0 && this.data[this.current_Index].title
       }
     },
     // 右侧 字母导航

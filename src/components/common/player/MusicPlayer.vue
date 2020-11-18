@@ -294,6 +294,8 @@ export default {
       this.moveY = touch.pageY - this.startY
       if (Math.abs(this.moveY) > Math.abs(this.moveX)) return
       this.lyric_percent = this.moveX / window.innerWidth
+      console.log(this.lyric_percent)
+
       if (this.lyric_percent < 0) {
         this.offsetX =
           this.moveX <= -window.innerWidth ? -window.innerWidth : this.moveX
