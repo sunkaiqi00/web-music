@@ -24,12 +24,12 @@ vue  vue-router  vuex
 ##### 插件
 
 ```
-better-scroll vue-lazyload postcss-px-to-viewport axios 
+better-scroll vue-lazyload postcss-px-to-viewport axios web-storage-cache fastclick
 ```
 
-##### 功能介绍
+##### 项目介绍
 
-对于使用记录，缓存到本地，为下次使用提供更好体验
+对于使用记录，使用localStorage缓存到本地，vw单位进行移动端适配   对于长列表滚动使用better-scroll  
 
 ###### 1.首页
 
