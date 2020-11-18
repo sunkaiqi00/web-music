@@ -1,10 +1,10 @@
 <template>
   <div class="user-playlist-wrapper">
     <div class="playlist-item" v-for="(item,index) in play_list" :key="index">
-      <div class="playlist-img">
+      <div class="playlist-img" @click.stop="play_my_playlist(item)">
         <img :src="image(item)" alt class="img" v-show="get_playlist_length(item)" />
       </div>
-      <div class="playlist-title">
+      <div class="playlist-title" @click.stop="play_my_playlist(item)">
         <span class="playlist-name">{{get_playlist_name(item,index)}}</span>
         <span class="playlist-length">{{get_playlist_length(item)+'首'}}</span>
       </div>
@@ -26,6 +26,9 @@ export default {
     return {}
   },
   methods: {
+    play_my_playlist(item) {
+      this.$emit('play_my_playlist', item)
+    },
     image(item) {
       return item[this.get_playlist_name(item)].length
         ? item[this.get_playlist_name(item)][0].image

@@ -44,7 +44,6 @@
   </transition>
 </template>
 <script>
-import MusicList from '@/components/common/song/MusicList'
 import SongList from '@/components/common/song/SongList.vue'
 import scroll from '@/components/common/scroll/scroll'
 import { musicMixin, userMixin } from '@/utils/mixin'
@@ -74,7 +73,6 @@ export default {
     }
   },
   components: {
-    MusicList,
     SongList,
     scroll,
     nothing,
@@ -108,7 +106,6 @@ export default {
         this.pointerEvents = true
       }
     },
-
     chooseAll() {
       this.playlist.map((item) => (item.editMode = true))
       this.isChooseAll = true

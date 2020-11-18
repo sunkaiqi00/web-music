@@ -46,12 +46,14 @@
         ></song-list>
       </div>
     </scroll>
+
+    <dialong ref="dialong">{{dialong_title}}</dialong>
+    <loading v-if="!songs" class="loading"></loading>
     <add-popup
       ref="addPopup"
       :_user_playlist="user_playList"
       @add_this_playlist="add_this_playlist"
     ></add-popup>
-    <loading v-if="!songs" class="loading"></loading>
   </div>
 </template>
 <script>
@@ -59,6 +61,7 @@ import scroll from '@/components/common/scroll/scroll'
 import loading from '@/components/common/loading/loading'
 import SongList from './SongList'
 import AddPopup from './AddPopup'
+import dialong from '@/components/common/dialong/dialong'
 import { musicMixin, userMixin } from '@/utils/mixin'
 import { saveUserPlayList } from '@/utils/localStorage'
 export default {
@@ -93,6 +96,7 @@ export default {
       // 列表滚动到距离顶部60px 取消图片的padding-top 设置固定高度 提高z-index盖住上滑的列表
       isChangeHeight: false,
       isEdit: false,
+      dialong_title: '',
     }
   },
   components: {
@@ -100,6 +104,7 @@ export default {
     SongList,
     loading,
     AddPopup,
+    dialong,
   },
   computed: {
     editText() {
@@ -128,6 +133,8 @@ export default {
       saveUserPlayList(res)
       this.setEditState(false)
       this.clearSelectSongs()
+      this.dialong_title = '添加成功'
+      this.$refs.dialong.show()
     },
     showAddPopup() {
       this.$refs.addPopup.show()
@@ -229,7 +236,7 @@ export default {
   top: 55px;
   z-index: 300;
   width: 100%;
-  height: 50px;
+  height: 60px;
   display: flex;
   flex-direction: column;
   padding: 0 20px;

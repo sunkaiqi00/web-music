@@ -4,7 +4,7 @@
       <div class="popup-content-wrapper" @click.stop>
         <div class="popup-title">新建歌单</div>
         <div class="popup-input-wrapper">
-          <input class="input" v-model="playlistName" type="text" placeholder="请输入歌单标题" />
+          <input class="input" v-model.trim="playlistName" type="text" placeholder="请输入歌单标题" />
           <span class="iconfont icon-delete" @click.stop="clearName"></span>
         </div>
         <div class="popup-control">

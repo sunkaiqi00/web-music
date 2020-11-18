@@ -104,15 +104,14 @@ export default {
 
     .user-playlist {
       width: 100%;
-      height: 140px;
-      max-height: 160px;
-      // overflow-x: hidden;
+      height: 120px;
       overflow: auto;
       no-wrap();
       margin-top: 20px;
 
       .playlist-name {
         line-height: 30px;
+        font-weight: 300;
       }
     }
   }

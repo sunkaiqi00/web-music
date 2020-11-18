@@ -49,7 +49,7 @@ export default {
       if (this.$refs.wrapper) {
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: this.probeType,
-          click: this.click,
+          // click: false,
         })
       }
       // 监听滚动  向父组件派发事件

@@ -1,16 +1,21 @@
 <template>
   <div class="song-list">
     <ul>
-      <li v-for="(item,index) in songs" :key="index" class="item">
+      <li v-for="(item,index) in songs" :key="index" class="item" @click.stop>
         <div class="rank" v-show="rank">
           <span :class="getRankClass(index)">{{getRankNum(index)}}</span>
         </div>
         <div class="ranknum" v-show="number">{{index+1}}.</div>
-        <div class="content" @click.stop="onPlay(item,index)">
+        <div class="content" @click.stop.prevent="onPlay(item,index)">
           <div class="singer-name">{{item.name}}</div>
           <p class="desc">{{item.singer + ' - ' + item.album}}</p>
         </div>
-        <div class="choose-wrapper" @click.stop="editSongs(item)" v-show="editState">
+        <div
+          class="choose-wrapper"
+          @click.stop.prevent="editSongs(item)"
+          @click.stop
+          v-show="editState"
+        >
           <span class="iconfont icon-choose" v-show="item.editMode"></span>
           <span class="iconfont icon-no-choose" v-show="!item.editMode"></span>
         </div>
@@ -38,7 +43,12 @@ export default {
   },
   methods: {
     editSongs(song) {
-      this.$emit('editPlaylist', song)
+      if (this.timer) {
+        clearTimeout(this.timer)
+      }
+      this.timer = setTimeout(() => {
+        this.$emit('editPlaylist', song)
+      }, 20)
     },
     getRankClass(index) {
       if (index <= 2) {

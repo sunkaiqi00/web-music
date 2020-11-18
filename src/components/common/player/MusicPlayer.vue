@@ -398,7 +398,6 @@ export default {
       }
       setTimeout(() => {
         this.audio.play()
-
         this.getLyric()
       }, 200)
     },
@@ -412,6 +411,7 @@ export default {
     this.audio = this.$refs.audio
     this.$refs.audio.currentTime = this.playTime
     this.currentTime = this.playTime
+    this.getLyric()
   },
 }
 </script>

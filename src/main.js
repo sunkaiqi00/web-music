@@ -9,7 +9,7 @@ Vue.config.productionTip = false;
 Vue.use(lazyLoad, {
   loading: require('@/assets/image/loading.gif')
 });
-// fastClick.attach(document.body);
+fastClick.attach(document.body);
 new Vue({
   router,
   store,

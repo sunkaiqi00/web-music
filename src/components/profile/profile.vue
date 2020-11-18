@@ -47,7 +47,11 @@
           </div>
         </div>
         <div class="no-playlist" v-show="!user_playList.length">暂无创建歌单</div>
-        <user-playlist :play_list="user_playList" @remove_playlist="showToast"></user-playlist>
+        <user-playlist
+          :play_list="user_playList"
+          @remove_playlist="showToast"
+          @play_my_playlist="play_my_playlist"
+        ></user-playlist>
       </div>
     </div>
     <playlist-songs
@@ -59,8 +63,9 @@
       :showNothing="showNothing"
     ></playlist-songs>
     <dialong ref="dialong">
-      <span>删除成功</span>
+      <span>{{dialong_title}}</span>
     </dialong>
+    <show-user-playlist @onPlay="onPlay" ref="user_play_list" :user_play_list="user_play_list"></show-user-playlist>
     <popup ref="createdPlaylist" @submit_playList="submit_playList"></popup>
     <confirm-toast :title="toastTitle" @confirm="remove_playlist" ref="toast"></confirm-toast>
   </scroll>
@@ -68,6 +73,7 @@
 <script>
 import PlaylistSongs from './PlaylistSongs'
 import UserPlaylist from './UserPlaylist'
+import showUserPlaylist from './ShowUserPlaylist'
 import dialong from '@/components/common/dialong/dialong'
 import popup from '@/components/common/popup/popup'
 import scroll from '@/components/common/scroll/scroll'
@@ -87,7 +93,9 @@ export default {
       songs: [], // 要展示的歌单
       EDITPLAYLIST: null,
       showNothing: 0,
-      toastTitle: '删除歌单',
+      toastTitle: '确认删除歌单？',
+      dialong_title: '',
+      user_play_list: {},
     }
   },
   watch: {
@@ -101,6 +109,7 @@ export default {
   components: {
     PlaylistSongs,
     UserPlaylist,
+    showUserPlaylist,
     dialong,
     popup,
     scroll,
@@ -118,6 +127,10 @@ export default {
     },
   },
   methods: {
+    play_my_playlist(item) {
+      this.user_play_list = item
+      this.$refs.user_play_list.show()
+    },
     showToast(index) {
       this.select_playlist = index
       this.$refs.toast.show()
@@ -128,21 +141,30 @@ export default {
       let list = this.user_playList
       this.setUserPlayList(list)
       saveUserPlayList(list)
+      this.dialong_title = '删除歌单成功'
+      this.$refs.dialong.show()
     },
     // 创建歌单
     submit_playList(key) {
       let flag = this.user_playList.some((item) => {
-        item[key] === key
+        return Object.keys(item)[0] === key
       })
+      if (flag) {
+        this.dialong_title = '已尽有这个歌单'
+        this.$refs.dialong.show()
+        return
+      }
       if (!flag) {
         let data = {
           [key]: [],
         }
         let list = this.user_playList
-        list.unshift(data)
+        list.push(data)
         this.setUserPlayList(list)
         saveUserPlayList(list)
       }
+      this.dialong_title = '创建歌单成功'
+      this.$refs.dialong.show()
     },
     created_play_list() {
       this.$refs.createdPlaylist.show()
@@ -163,6 +185,7 @@ export default {
           break
       }
       this.setEditState(false)
+      this.dialong_title = '删除成功'
       this.$refs.dialong.show()
     },
     onPlay(item, index) {

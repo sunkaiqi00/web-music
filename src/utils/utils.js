@@ -31,7 +31,7 @@ export function throttle(fun, delay) {
   let timer;
   return function(...args) {
     if (timer) {
-      clearInterval(timer);
+      clearTimeout(timer);
     }
     timer = setTimeout(() => {
       fun.apply(this, args);
