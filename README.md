@@ -56,7 +56,8 @@ better-scroll vue-lazyload postcss-px-to-viewport axios
 
 - 显示当前播发歌曲名字和歌手
 - svg在播放按钮上动态绘制播放进度
-- 查看播放列表按钮
+- 查看播放歌曲列表
+- 点击添加到播放列表
 - 效果图：
 
 <img src="image\mini_player.png" style="zoom: 67%;" />
@@ -64,6 +65,8 @@ better-scroll vue-lazyload postcss-px-to-viewport axios
 
 
 <img src="image\popup_playlist.png" alt="popup_playlist" style="zoom:50%;" />
+
+<img src="image\add_music_to_playlist.png" style="zoom:50%;" />
 
 ###### 3.播放器
 
@@ -93,9 +96,9 @@ better-scroll vue-lazyload postcss-px-to-viewport axios
 
 ###### 5. 歌手歌单
 
-- 下拉图片放大
-
 - 选择歌曲添加歌单
+
+- 为列表的滑动添加一些交互
 
 - 效果图：
 
