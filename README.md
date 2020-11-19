@@ -55,7 +55,7 @@ better-scroll vue-lazyload postcss-px-to-viewport axios web-storage-cache fastcl
 ###### 2. mini播放器
 
 - 显示当前播发歌曲名字和歌手
-- svg在播放按钮上动态绘制播放进度
+- 在播放按钮上使用svg动态绘制播放进度
 - 查看播放歌曲列表
 - 点击添加到播放列表
 - 效果图：
