@@ -1,37 +1,37 @@
 # web-music
 
-##### 下载依赖
+### 下载依赖
 ```
 npm install
 ```
 
-##### 运行服务
+### 运行服务
 ```
 npm run serve
 ```
 
-##### 打包文件
+### 打包文件
 ```
 npm run build
 ```
 
-##### 技术栈
+### 技术栈
 
 ```
 vue  vue-router  vuex 
 ```
 
-##### 插件
+### 插件
 
 ```
 better-scroll vue-lazyload postcss-px-to-viewport axios web-storage-cache fastclick
 ```
 
-##### 项目介绍
+### 项目介绍
 
 对于使用记录，使用localStorage缓存到本地，vw单位进行移动端适配   对于长列表滚动使用better-scroll  
 
-###### 1.首页
+#### 1.首页
 
 - 喜欢歌单：保存收藏的歌曲 
 - 最近播放歌单： 保存最近播放歌曲
@@ -42,17 +42,17 @@ better-scroll vue-lazyload postcss-px-to-viewport axios web-storage-cache fastcl
 
 
 
-<img src="image\home.png" style="zoom:50%;" />
+<img src="image\home.png" style="zoom: 33%;" />
 
-<img src="image\plalist_management.png" alt="plalist_management" style="zoom:50%;" />
+<img src="image\plalist_management.png" alt="plalist_management" style="zoom: 33%;" />
 
-<img src="image\search_page.png" alt="search_page" style="zoom:50%;" />
+<img src="image\search_page.png" alt="search_page" style="zoom: 33%;" />
 
-<img src="image\search_result.png" alt="search_result" style="zoom:50%;" />
+<img src="image\search_result.png" alt="search_result" style="zoom: 33%;" />
 
 
 
-###### 2. mini播放器
+#### 2. mini播放器
 
 - 显示当前播发歌曲名字和歌手
 - 在播放按钮上使用svg动态绘制播放进度
@@ -64,11 +64,11 @@ better-scroll vue-lazyload postcss-px-to-viewport axios web-storage-cache fastcl
 
 
 
-<img src="image\popup_playlist.png" alt="popup_playlist" style="zoom:50%;" />
+<img src="image\popup_playlist.png" alt="popup_playlist" style="zoom: 33%;" />
 
-<img src="image\add_music_to_playlist.png" style="zoom:50%;" />
+<img src="image\add_music_to_playlist.png" style="zoom: 33%;" />
 
-###### 3.播放器
+#### 3.播放器
 
 - 播放模式：顺序，单曲，随机
 
@@ -80,11 +80,11 @@ better-scroll vue-lazyload postcss-px-to-viewport axios web-storage-cache fastcl
 
 - 效果图：
 
-  <img src="image\play_image.png" style="zoom:50%;" />
+  <img src="image\play_image.png" style="zoom: 33%;" />
 
-  <img src="image\play_lyric.png" alt="play_lyric" style="zoom:50%;" />
+  <img src="image\play_lyric.png" alt="play_lyric" style="zoom: 33%;" />
 
-###### 4. 歌手页面
+#### 4. 歌手页面
 
 - 顶部title：显示当前歌手区域首字母，滚动切换动画
 
@@ -92,9 +92,9 @@ better-scroll vue-lazyload postcss-px-to-viewport axios web-storage-cache fastcl
 
 - 效果图：
 
-  <img src="image\singer.png" style="zoom:50%;" />
+  <img src="image\singer.png" style="zoom: 33%;" />
 
-###### 5. 歌手歌单
+#### 5. 歌手歌单
 
 - 选择歌曲添加歌单
 
@@ -102,6 +102,6 @@ better-scroll vue-lazyload postcss-px-to-viewport axios web-storage-cache fastcl
 
 - 效果图：
 
-  <img src="image\addplaylist.png" style="zoom:50%;" />
+  <img src="image\addplaylist.png" style="zoom: 33%;" />
 
-  <img src="image\singer_playlist.png" alt="singer_playlist" style="zoom:50%;" />
+  <img src="image\singer_playlist.png" alt="singer_playlist" style="zoom: 33%;" />
