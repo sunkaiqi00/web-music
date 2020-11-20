@@ -122,7 +122,7 @@
       :src="currentSong.url"
       ref="audio"
       @timeupdate="updataTime"
-      @canplay="ready"
+      @play="ready"
       @error="error"
       @ended="end"
     ></audio>
@@ -232,6 +232,9 @@ export default {
     prev() {
       // 当前没有加载完毕 阻止切歌
       if (!this.musicReady) return
+      // if (this.currentLyric) {
+      //   this.currentLyric = null
+      // }
       // 播放列表只有一首歌  循环来控制
       if (this.playList.length === 1) {
         this.loop()
@@ -252,6 +255,9 @@ export default {
     // 下
     next() {
       if (!this.musicReady) return
+      // if (this.currentLyric) {
+      //   this.currentLyric = null
+      // }
       if (this.playList.length === 1) {
         this.loop()
         return
@@ -294,7 +300,6 @@ export default {
       this.moveY = touch.pageY - this.startY
       if (Math.abs(this.moveY) > Math.abs(this.moveX)) return
       this.lyric_percent = this.moveX / window.innerWidth
-      console.log(this.lyric_percent)
 
       if (this.lyric_percent < 0) {
         this.offsetX =
@@ -347,6 +352,9 @@ export default {
       this.currentSong
         .getSongLyric()
         .then((lyric) => {
+          if (this.currentSong.lyric !== lyric) {
+            return
+          }
           this.currentLyric = new Lyric(lyric, this.hanldleLyric)
           if (this.play) {
             this.currentLyric.play()
@@ -398,10 +406,11 @@ export default {
       if (this.currentLyric) {
         this.currentLyric.stop()
       }
-      setTimeout(() => {
+      clearInterval(this.timer)
+      this.timer = setTimeout(() => {
         this.audio.play()
         this.getLyric()
-      }, 200)
+      }, 300)
     },
     play(play) {
       this.$nextTick(() => {
