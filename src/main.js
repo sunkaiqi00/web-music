@@ -7,11 +7,11 @@ import fastClick from 'fastclick';
 import '@/assets/style/css/index.styl';
 Vue.config.productionTip = false;
 Vue.use(lazyLoad, {
-  loading: require('@/assets/image/loading.gif')
+  loading: require('@/assets/image/loading.gif'),
 });
 fastClick.attach(document.body);
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app');

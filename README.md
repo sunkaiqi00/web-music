@@ -15,30 +15,18 @@ npm run serve
 npm run build
 ```
 
-### 技术栈
+项目介绍：使用Vue全家桶与qq音乐接口开发web音乐app，vw移动端适配。
 
-```
-vue  vue-router  vuex 
-```
+实现功能：
 
-### 插件
+1. 个人主页：
+   - 歌曲搜索及搜索历史管理，收藏和最近播放歌单记录收藏与播放歌曲，创建歌单，歌单内歌曲管理。删除歌单。
+2. 播放器：
+   - 手势实现歌词与封面的显示隐藏动画，播放模式切换，快进，切歌，收藏。mini播放器：svg绘制播放进度，播放歌单展示，对歌单进行添加删除管理，播放模式切换，收藏。正在播放滚动顶部。
+3. 其他：
+   - better-scroll实现通讯录列表联动组件，通用歌单组件，封面与滑动交互，对歌曲的选择添加到自己歌单。
 
-```
-better-scroll vue-lazyload postcss-px-to-viewport axios web-storage-cache fastclick
-```
-
-### 项目介绍
-
-对于使用记录，使用localStorage缓存到本地，vw单位进行移动端适配   对于长列表滚动使用better-scroll  
-
-#### 1.首页
-
-- 喜欢歌单：保存收藏的歌曲 
-- 最近播放歌单： 保存最近播放歌曲
-- 我的歌单：显示创建的歌单   可以创建或删除
-- 搜索框：快速输入会进行节流控制避免发送太多请求
-- 进入歌单内：管理歌单内歌曲
-- 效果图：
+### 效果图：
 
 
 
@@ -52,14 +40,6 @@ better-scroll vue-lazyload postcss-px-to-viewport axios web-storage-cache fastcl
 
 
 
-#### 2. mini播放器
-
-- 显示当前播发歌曲名字和歌手
-- 在播放按钮上使用svg动态绘制播放进度
-- 查看播放歌曲列表
-- 点击添加到播放列表
-- 效果图：
-
 <img src="image\mini_player.png" style="zoom: 67%;" />
 
 
@@ -68,40 +48,14 @@ better-scroll vue-lazyload postcss-px-to-viewport axios web-storage-cache fastcl
 
 <img src="image\add_music_to_playlist.png" style="zoom: 33%;" />
 
-#### 3.播放器
 
-- 播放模式：顺序，单曲，随机
 
-- 下一首，上一些后，播放暂停，收藏
+<img src="image\play_image.png" style="zoom: 33%;" />
 
-- 左右滑动，切换cd显示或歌词展示
+<img src="image\play_lyric.png" alt="play_lyric" style="zoom: 33%;" />
 
-- 歌词始终滚动：当前播放的歌词始终在中间
+<img src="image\singer.png" style="zoom: 33%;" />
 
-- 效果图：
+<img src="image\addplaylist.png" style="zoom: 33%;" />
 
-  <img src="image\play_image.png" style="zoom: 33%;" />
-
-  <img src="image\play_lyric.png" alt="play_lyric" style="zoom: 33%;" />
-
-#### 4. 歌手页面
-
-- 顶部title：显示当前歌手区域首字母，滚动切换动画
-
-- 右侧字母导航：根据显示歌手区域首字母高亮显示，点击滑动歌手列表滚动到对应区域
-
-- 效果图：
-
-  <img src="image\singer.png" style="zoom: 33%;" />
-
-#### 5. 歌手歌单
-
-- 选择歌曲添加歌单
-
-- 为列表的滑动添加一些交互
-
-- 效果图：
-
-  <img src="image\addplaylist.png" style="zoom: 33%;" />
-
-  <img src="image\singer_playlist.png" alt="singer_playlist" style="zoom: 33%;" />
+<img src="image\singer_playlist.png" alt="singer_playlist" style="zoom: 33%;" />

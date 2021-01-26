@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import BScroll from 'better-scroll'
+import BScroll from 'better-scroll';
 export default {
   props: {
     probeType: {
@@ -40,8 +40,8 @@ export default {
   watch: {
     data() {
       setTimeout(() => {
-        this.refresh()
-      }, this.refreshDelay)
+        this.refresh();
+      }, this.refreshDelay);
     },
   },
   methods: {
@@ -50,51 +50,51 @@ export default {
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: this.probeType,
           // click: false,
-        })
+        });
       }
       // 监听滚动  向父组件派发事件
       if (this.listenScroll) {
-        this.scroll.on('scroll', (location) => {
-          this.$emit('onScroll', location)
-        })
+        this.scroll.on('scroll', location => {
+          this.$emit('onScroll', location);
+        });
       }
       // 下拉刷新  监听滚动结束时 判断滚动的距离和最大滚动距离
       if (this.pullup) {
         this.scroll.on('scrollEnd', () => {
           if (this.scroll.y <= this.scroll.maxScrollY + 50) {
-            this.$emit('scrollToEnd')
+            this.$emit('scrollToEnd');
           }
-        })
+        });
       }
       // 滚动前事件
       if (this.beforeScroll) {
         this.scroll.on('beforeScrollStart', () => {
-          this.$emit('before_Scroll')
-        })
+          this.$emit('before_Scroll');
+        });
       }
     },
     enable() {
-      this.scroll && this.scroll.enable()
+      this.scroll && this.scroll.enable();
     },
     disable() {
-      this.scroll && this.scroll.disable()
+      this.scroll && this.scroll.disable();
     },
     refresh() {
-      this.scroll && this.scroll.refresh()
+      this.scroll && this.scroll.refresh();
     },
     scrollTo() {
-      this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
+      this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments);
     },
     scrollToElement() {
       // console.log(1)
-      this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
+      this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments);
     },
   },
   mounted() {
-    this.initScroll()
+    this.initScroll();
   },
-}
+};
 </script>
-<style scoped lang='stylus'>
+<style scoped lang="stylus">
 @import '~assets/style/css/global';
 </style>
